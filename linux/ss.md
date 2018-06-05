@@ -1,5 +1,7 @@
 > ss 命令用来显示处于活动状态的套接字信息。ss命令可以用来获取socket统计信息，它可以显示和netstat类似的内容。但ss的优势在于它能够显示更多更详细的有关TCP和连接状态的信息，而且比netstat更快速更高效。
 
+[详细笔记](http://www.ttlsa.com/linux-command/ss-replace-netstat/)
+
 当服务器的socket连接数量变得非常大时，无论是使用netstat命令还是直接cat /proc/net/tcp，执行速度都会很慢。可能你不会有切身的感受，但请相信我，当服务器维持的连接达到上万个的时候，使用netstat等于浪费 生命，而用ss才是节省时间。
 
 
@@ -40,5 +42,7 @@
     # 找出打开套接字/端口应用程序
     ss -pl | grep 3306
     # 显示所有UDP Sockets
-     ss -u -a
+    ss -u -a
+    # 显示443端口线程数量
+    ss -ant sport = :443  | wc -l
     
