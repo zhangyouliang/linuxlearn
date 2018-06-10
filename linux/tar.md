@@ -13,6 +13,11 @@ linux下tar命令解压到指定的目录 ：
 例：将当前目录下的zzz文件打包到根目录下并命名为zzz.tar.gz
 
     #tar zcvf /zzz.tar.gz ./zzz
+
+忽略某些文件夹
+
+    tar -cvpf /tmp/system.tar --directory=/ --exclude=proc --exclude=sys --exclude=dev --exclude=run --exclude=boot .    
+
     
 ---------------------------------------------------------------------------------------
 tar 解压缩命令

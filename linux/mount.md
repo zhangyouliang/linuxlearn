@@ -1,6 +1,7 @@
 > mount 挂载命令
 
-参考: http://www.linuxidc.com/Linux/2016-08/134666.htm
+参考: [Linux基础知识之挂载详解（mount,umount及开机自动挂载）](http://www.linuxidc.com/Linux/2016-08/134666.htm)
+, [linux的mount（挂载）命令详解](https://www.cnblogs.com/MR-Guo/p/5547365.html)
 
 格式
 
