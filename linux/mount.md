@@ -228,4 +228,24 @@ g 创建一个新的GPT 分区表
 
 ````
 
+--------
+
+mac
+=====
+
+    linux:
+    mount -o loop
+    mac: 没有loop 选项
+    # 挂载
+    hdiutil mount busybox.iso
+    # 查看
+    df
+    # 弹出
+    hdiutil eject /Volumes/CDROM
+
+
+
+
+
+
 
