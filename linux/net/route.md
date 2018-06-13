@@ -1,4 +1,5 @@
 > route 路由查看 [linux 路由表设置 之 route 指令详解](https://www.cnblogs.com/baiduboy/p/7278715.html)
+> 重启后失效
 
 
 参数
