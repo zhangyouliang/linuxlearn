@@ -1,4 +1,6 @@
 > 从fedora15开始，系统对于daemon的启动管理方法不再采用SystemV形式，而是使用了sytemd的架构来管理daemon的启动。
+> [systemctl 命令完全指南](https://linux.cn/article-5926-1.html)
+> [Systemd 入门教程：实战篇](http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-part-two.html)
 
 service 案例
 ---
@@ -53,6 +55,7 @@ service 案例
 
 开机自动启动
 
+    # 没有 [Install] 模块,将不能设置为开机自动启动
     systemctl enable httpd.service
 关闭自动启动
 

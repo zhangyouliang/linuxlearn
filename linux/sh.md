@@ -128,3 +128,19 @@ set通过选项来开关shell的不同特性，每个特性都对应一个选项
 
 http://pubs.opengroup.org/onlinepubs/009695399/utilities/set.html
 
+-------
+其他
+====
+
+# 防止重复重定向等操作
+set -o noclobber
+# 防止意外退出
+set -o ignoreeof
+# 防止转义
+set –o noglob
+# 显示shell 执行过程
+set -x 
+
+
+
+
