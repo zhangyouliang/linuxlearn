@@ -1,0 +1,14 @@
+
+
+
+--add
+iptables -A INPUT -p tcp --dport 443 -m recent --name BAD_HTTP_ACCESS --update --seconds 60 --hitcount 30 -j REJECT
+iptables -A INPUT -p tcp --dport 443 -m recent --name BAD_HTTP_ACCESS --set -j ACCEPT
+
+iptables -I INPUT -p tcp --dport 443 -m connlimit --connlimit-above 30 -j REJECT
+
+
+--del
+iptables -D INPUT -p tcp --dport 443 -m recent --name BAD_HTTP_ACCESS --update --seconds 60 --hitcount 30 -j REJECT
+iptables -D INPUT -p tcp --dport 443 -m recent --name BAD_HTTP_ACCESS --set -j ACCEPT
+iptables -D INPUT -p tcp --dport 443 -m connlimit --connlimit-above 30 -j REJECT
