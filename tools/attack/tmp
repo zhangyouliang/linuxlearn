@@ -12,3 +12,11 @@ iptables -I INPUT -p tcp --dport 443 -m connlimit --connlimit-above 30 -j REJECT
 iptables -D INPUT -p tcp --dport 443 -m recent --name BAD_HTTP_ACCESS --update --seconds 60 --hitcount 30 -j REJECT
 iptables -D INPUT -p tcp --dport 443 -m recent --name BAD_HTTP_ACCESS --set -j ACCEPT
 iptables -D INPUT -p tcp --dport 443 -m connlimit --connlimit-above 30 -j REJECT
+
+
+2018年07月04日13:54:39
+
+#  todo https://blog.csdn.net/lemon_tree12138/article/details/51141440
+#  todo https://blog.csdn.net/WHACKW/article/details/50018309
+# todo https://blog.csdn.net/txyj08/article/details/77640235
+# todo https://blog.csdn.net/xuanhun521/article/details/52440272
