@@ -1,5 +1,6 @@
-
 > mytop : mysql 性能监控工具
+
+> [参考](https://blog.csdn.net/u011871037/article/details/52608831)
 
 Top 命令可以查看操作系统的性能状态,mytop 命令类似 top 命令，界面结构也类似，只是 mytop 显示的是 mysql 的状态信息，例如我们非常关心的
 
