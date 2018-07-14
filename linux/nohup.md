@@ -22,3 +22,6 @@
     nohup command > myout.file 2>&1 &
     
 在上面的例子中，输出被重定向到 `myout.file`文件中。
+    
+    # 后台运行 python 程序
+    nohup python -u app.py > out.log 2>&1 &

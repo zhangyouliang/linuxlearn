@@ -29,4 +29,6 @@
     ps aux 
     #  进程树形结构
     ps axjf
+    # 查看进程树
+    pstree -H 24119
     
