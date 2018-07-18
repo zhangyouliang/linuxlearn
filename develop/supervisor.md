@@ -244,6 +244,20 @@ supervisor的配置文件默认是不全的，不过在大部分默认的情况�
 
 4）：其他参数：supervisor开启后子进程自动开启（autostart=true）和子进程退出后自动启动（autorestart=ture）
 
+
+    supervisordctl status <进程名> 查看进程运行状态 
+    supervisordctl start <进程名> 启动进程 
+    supervisordctl stop <进程名> 关闭进程 
+    supervisordctl restart <进程名> 重启进程 
+    supervisordctl update 重新载入配置文件 
+    supervisordctl shutdown 关闭supervisord 
+    
+    supervisordctl clear <进程名> 清空进程日志 
+    supervisordctl 进入到交互模式下。使用help查看所有命令。
+    
+    start stop restart + all 表示启动，关闭，重启所有进程。
+
+
 更多的参数可以看[官方文档](http://supervisord.org/configuration.html)和[supervisor(一)基础篇](http://lixcto.blog.51cto.com/4834175/1539136)的说明。
 
 总结：
