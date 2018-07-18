@@ -55,3 +55,8 @@ ubuntu 更换阿里数据源
 
     apt-get -f -y install 
     dpkg -i   *.deb
+# 时区设置
+-------
+
+    # 设置时区为上海(+8) 时区
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
