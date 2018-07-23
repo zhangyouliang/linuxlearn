@@ -35,16 +35,16 @@ top命令是Linux下常用的性能分析工具，能够实时显示系统中各
 其他快捷键:
 
     b 开启高亮护着关闭高亮
-    **x 切换高亮白色**
-    **f或者F 从当前显示中添加或者删除项目。**
+    x 切换高亮白色
+    f或者F 从当前显示中添加或者删除项目。
     o或者O改变显示项目的顺序。
     l 切换显示平均负载和启动时间信息。
-    **m 切换显示内存信息。**
-    **t 切换显示进程和CPU状态信息。**
-    **c 切换显示命令名称和完整命令行。**
-    **M 根据驻留内存大小进行排序。**
+    m 切换显示内存信息。
+    t 切换显示进程和CPU状态信息。
+    c 切换显示命令名称和完整命令行。
+    M 根据驻留内存大小进行排序。
     P 根据CPU使用百分比大小进行排序。
-    **T 根据时间/累计时间进行排序。**
+    T 根据时间/累计时间进行排序。
     W 将当前设置写入~/.toprc文件中。这是写top配置文件的推荐方法。
     Shift+M 可按内存占用情况进行排序。
     
@@ -67,8 +67,31 @@ top命令是Linux下常用的性能分析工具，能够实时显示系统中各
     通过”shift + >”或”shift + <”可以向右或左改变排序列，下图是按一次”shift + >”
 
 
+限制 cpu 占用 
+
+> [参考](https://www.howtoing.com/how-to-limit-cpu-usage-with-cpulimit-on-ubuntu-linux/)
+
+    apt install cpulimit
+    # 测试 cpu 占用 100% 的情况
+    dd if=/dev/zero of=/dev/null &
+    top 
+    ....
+    # 快捷键 P ,即可根据cpu 占用排序
     
+    # 现在利用 cpulimit 进行限制
+    cpulimit -l 30 dd if=/dev/zero of=/dev/null &
+    # top 查看 ,占用只有 33 %
     
+    # 利用完全部 cpu
+    # 查看cput 个数
+    nproc
+    # 我的 是 4 和 cpu
+    for j in `seq 1 4`; do dd if=/dev/zero of=/dev/null & done
+    # 查看占用情况
+    top
+    ....
+    利用 cpulimit 限制
+    for j in `seq 1 4`; do cpulimit -l 30  dd if=/dev/zero of=/dev/null & done
     
     
 
