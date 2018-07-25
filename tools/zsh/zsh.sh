@@ -15,3 +15,5 @@ source ~/.oh-my-zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 # 或者
 plugins=(zsh-autosuggestions)
 EOF
+
+source ~/.zshrc
