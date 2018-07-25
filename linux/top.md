@@ -1,5 +1,5 @@
 > top: 查看linux进程内存占用情况
-> [linux top命令查看内存及多核CPU的使用讲述](https://www.cnblogs.com/dragonsuc/p/5512797.html),[Linux top命令参数及使用方法详解](http://www.linuxeye.com/command/top.html)
+> [linux top命令查看内存及多核CPU的使用讲述](https://www.cnblogs.com/dragonsuc/p/5512797.html),[Linux top命令参数及使用方法详解](http://www.linuxeye.com/command/top.html) ,[Linux top命令的用法详细详解](https://www.cnblogs.com/zhoug2020/p/6336453.html)
 top
 ---
 
