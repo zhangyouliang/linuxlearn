@@ -2,6 +2,8 @@
 
 ####
 #
+#  针对连接数封 ip
+#
 # chmod +x dropip.sh
 #
 # crontab -e
