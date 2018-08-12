@@ -1,5 +1,13 @@
 > 内存计算
 
+### 查看内存的命令
+
+    free – 一个在 Linux 上查看内存用量统计（可用和已用）的标准工具
+    smem – Linux 内存报告/统计工具
+    vmstat – 一个好用的用于虚拟内存统计的标准工具
+    top – 功能比较齐全
+
+### # free  
 
     ➜  ~ free -h
                   total        used        free      shared  buff/cache   available
@@ -21,7 +29,6 @@ available: 可用内存 = ( free+ buffer/cache)
 
 
 ### # free 与 available
-----
 
 > [参考](https://www.imooc.com/article/26314)
 

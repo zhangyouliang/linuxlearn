@@ -2,7 +2,7 @@
 
 cd ~/.oh-my-zsh/plugins/
 
-git clone https://gitee.com/whatdy/zsh-autosuggestions.git
+git clone https://gitee.com/githubClone/zsh-autosuggestions.git
 
 
 cat>>~/.zshrc<<EOF
