@@ -1,12 +1,14 @@
 > ifstat命令就像iostat/vmstat描述其它的系统状况一样，是一个统计网络接口活动状态的工具。ifstat工具系统中并不默认安装，需要自己下载源码包，重新编译安装，使用过程相对比较简单。
 
 下载
+-----
 
     http://gael.roualland.free.fr/ifstat/  （官网）
     wget http://gael.roualland.free.fr/ifstat/ifstat-1.1.tar.gz
 
 编译安装
 --
+
     tar -zxvf ifstat-1.1.tar.gz
     cd ifstat-1.1
     ./configure            #默认会安装到/usr/local/bin/目录中
@@ -15,6 +17,8 @@
 
 选项
 --
+
+
     -l 监测环路网络接口（lo）。缺省情况下，ifstat监测活动的所有非环路网络接口。经使用发现，加上-l参数能监测所有的网络接口的信息，而不是只监测 lo的接口信息，也就是说，加上-l参数比不加-l参数会多一个lo接口的状态信息。
     -a 监测能检测到的所有网络接口的状态信息。使用发现，比加上-l参数还多一个plip0的接口信息，搜索一下发现这是并口（网络设备中有一 个叫PLIP (Parallel Line Internet Protocol). 它提供了并口...）
     -z 隐藏流量是无的接口，例如那些接口虽然启动了但是未用的
@@ -33,6 +37,7 @@
     -d 指定一个驱动来收集状态信息
 实例
 ------
+
     # ifstat -tT
       time           eth0                eth1                eth2                eth3               Total      
     HH:MM:ss   KB/s in  KB/s out   KB/s in  KB/s out   KB/s in  KB/s out   KB/s in  KB/s out   KB/s in  KB/s out
@@ -41,3 +46,7 @@
     16:53:06      1.58      0.71      0.42      0.78      0.00      0.00      0.00      0.00      2.01      1.48
     16:53:07      0.57      0.40      1.91      2.61      0.00      0.00      0.00      0.00      2.48      3.01
     16:53:08      0.73      0.40    924.02   1248.91      0.00      0.00      0.00      0.00    924.76   1249.31
+
+    
+    # 显示 eth0 端口的流量情况
+    ifstat -tT -i eth0

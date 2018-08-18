@@ -1,5 +1,8 @@
 > find : 搜索命令 
 
+> [参考](http://blog.51cto.com/13572810/2065800)
+
+> [参考](http://man.linuxde.net/find)
 
 
 命令参数:

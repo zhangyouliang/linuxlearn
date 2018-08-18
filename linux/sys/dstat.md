@@ -36,9 +36,13 @@
 
 语法
 --
+
     dstat [-afv] [options..] [delay [count]]
+
+
 常用选项
 --
+
     -c：显示CPU系统占用，用户占用，空闲，等待，中断，软件中断等信息。
     -C：当有多个CPU时候，此参数可按需分别显示cpu状态，例：-C 0,1 是显示cpu0和cpu1的信息。
     -d：显示磁盘读写数据大小。
@@ -59,3 +63,27 @@
     -v：等同于 -pmgdsc -D total。
     --output 文件：此选项也比较有用，可以把状态信息以csv的格式重定向到指定的文件中，以便日后查看。例：dstat --output /root/dstat.csv & 此时让程序默默的在后台运行并把结果输出到/root/dstat.csv文件中。
     当然dstat还有很多更高级的用法，常用的基本这些选项，更高级的用法可以结合man文档。
+   
+
+
+
+dstat 拓展
+----
+
+    -–disk-util ：显示某一时间磁盘的忙碌状况
+    -–freespace ：显示当前磁盘空间使用率
+    -–proc-count ：显示正在运行的程序数量
+    -–top-bio ：指出块I/O最大的进程
+    -–top-cpu ：图形化显示CPU占用最大的进程
+    -–top-io ：显示正常I/O最大的进程
+    -–top-mem ：显示占用最多内存的进程
+
+例子
+----
+
+    # 查看全部内存都被谁占用了
+    dstat -g -l -m -s --top-mem
+    # 显示一些关于CPU资源损耗的数据：
+    dstat -c -y -l --proc-count --top-cpu
+    # 输出一个 csv 格式的文件,显示cpu,磁盘,网络信息
+    dstat --output /tmp/sample.csv -cdn

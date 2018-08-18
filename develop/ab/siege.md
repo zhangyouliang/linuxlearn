@@ -25,7 +25,7 @@
     Elapsed time: 31.32 secs //总共用时
     Data transferred: 1.15 MB //共数据传输1.15 MB
     Response time: 3.04 secs //显示网络连接的速度
-    Transaction rate: 17.56 trans/sec //均每秒完成 17.56 次处理：表示服务器后
+    Transaction rate: 17.56 trans/sec // 每秒事务处理量
     Throughput: 0.04 MB/sec //平均每秒传送数据
     Concurrency: 53.44 //实际最高并发数
     Successful transactions: 433 //成功处理次数
