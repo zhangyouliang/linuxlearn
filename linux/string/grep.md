@@ -31,3 +31,16 @@
     -x 只显示全列符合的列。
     -y 此参数效果跟“-i”相同。
     -o 只输出文件中匹配到的部分。
+
+实例
+---
+
+    # 搜索不包含 bb,并且出行号 
+    echo 'aabbbb\nbbb\ncccc\ndddd' | grep -v -n bb
+    
+    # grep输出以0作为结尾符的文件名（-z）:
+    grep "test" file* -lZ| xargs -0 rm
+
+    # 搜索包含 123 或者 abc
+    grep -E '123|abc' filename
+     

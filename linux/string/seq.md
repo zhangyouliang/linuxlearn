@@ -1,4 +1,4 @@
-> sql 命令用于产生从某个数到另外一个数之间的所有证书
+> seq 命令用于产生从某个数到另外一个数之间的所有证书
 
 语法
 ---
@@ -24,6 +24,12 @@
     
 指定 `\n` 作为分隔符号:
 
-    # seq -s "`echo -e "\n"`" 9 11
-    192939495969798999109119%
+    # seq -s "`echo -e "\n"`" 19 10 119
+    192939495969798999109119
+    
 
+> awk '/start_pattern/, /end_pattern/' filename
+
+    
+    seq 100 | awk '/13/,/15/'
+    cat /etc/passwd| awk '/mai.*mail/,/news.*news/'

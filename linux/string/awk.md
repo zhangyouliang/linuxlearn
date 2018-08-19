@@ -13,41 +13,17 @@ awk命令格式和选项
 常用命令选项
 ---
 
-    -F fs   fs指定输入分隔符，fs可以是字符串或正则表达式，如-F:
+    -F fs   fs指定输入分隔符，fs可以是字符串或正则表达式，(默认空格)如-F:
     -v var=value   赋值一个用户定义变量，将外部变量传递给awk
     -f scripfile  从脚本文件中读取awk命令
     -m[fr] val   对val值设置内在限制，-mf选项限制分配给val的最大块数目；-mr选项限制记录的最大数目。这两个功能是Bell实验室版awk的扩展功能，在标准awk中不适用。
     
-模式
----
-模式可以是以下任意一个：
-
-- /正则表达式/：使用通配符的扩展集。
-- 关系表达式：使用运算符进行操作，可以是字符串或数字的比较测试。
-- 模式匹配表达式：用运算符~（匹配）和~!（不匹配）。
-- BEGIN语句块、pattern语句块、END语句块：参见awk的工作原理
-
-操作
----
-操作由一个或多个命令、函数、表达式组成，之间由换行符或分号隔开，并位于大括号内，主要部分是：
-
-- 变量或数组赋值
-- 输出命令
-- 内置函数
-- 控制流语句
-
-awk脚本基本结构
----
-    awk 'BEGIN{ print "start" } pattern{ commands } END{ print "end" }' file
-    
-一个awk脚本通常由：BEGIN语句块、能够使用模式匹配的通用语句块、END语句块3部分组成，这三个部分是可选的。任意一个部分都可以不出现在脚本中，脚本通常是被单引号或双引号中，例如：
-
-    awk 'BEGIN{ i=0 } { i++ } END{ print i }' filename
-    awk "BEGIN{ i=0 } { i++ } END{ print i }" filename
 
 awk的工作原理
 --
-    awk 'BEGIN{ commands } pattern{ commands } END{ commands }'
+> awk 'BEGIN{ commands } pattern{ commands } END{ commands }'
+
+
 - 第一步：执行BEGIN{ commands }语句块中的语句；
 - 第二步：从文件或标准输入(stdin)读取一行，然后执行pattern{ commands }语句块，它逐行扫描文件，从第一行到最后一行重复这个过程，直到文件全部被读取完毕。
 - 第三步：当读至输入流末尾时，执行END{ commands }语句块。
@@ -58,24 +34,16 @@ awk的工作原理
 
 **pattern**语句块中的通用命令是最重要的部分，它也是可选的。如果没有提供pattern语句块，则默认执行{ print }，即打印每一个读取到的行，awk读取的每一行都会执行该语句块。
 
-示例
----
 
-    echo -e "A line 1nA line 2" | awk 'BEGIN{ print "Start" } { print } END{ print "End" }'
-    Start
-    A line 1
-    A line 2
-    End
-当使用不带参数的print时，它就打印当前行，当print的参数是以逗号进行分隔时，打印时则以空格作为定界符。在awk的print语句块中双引号是被当作拼接符使用，例如：
+- print 以逗号分个时,参数以空格定界
+- 使用 `""` 作为拼接符
 
-    echo | awk '{ var1="v1"; var2="v2"; var3="v3"; print var1,var2,var3; }' 
-v1 v2 v3
 
-双引号拼接使用：
+    $ echo | awk '{var1 = "v1";var2="v2"; print var1,var2}'
+    v1 v2
+    $ echo | awk '{var1 = "v1";var2="v2"; print var1"<<<<>>>>>"var2}'
+    v1<<<<>>>>>v2
 
-    echo | awk '{ var1="v1"; var2="v2"; var3="v3"; print var1"="var2"="var3; }'
-    v1=v2=v3
-`{ }`类似一个循环体，会对文件中的每一行进行迭代，通常变量初始化语句（如：i=0）以及打印文件头部的语句放入BEGIN语句块中，将打印的结果等语句放在END语句块中。
 
 
 
@@ -85,6 +53,10 @@ awk内置变量（预定义变量）
 
     $n 当前记录的第n个字段，比如n为1表示第一个字段，n为2表示第二个字段。 
     $0 这个变量包含执行过程中当前行的文本内容。
+    NF 显示当前行字符串的长度
+    $NF 显示当前字符串
+    NR 显示当前行号
+    
     [N] ARGC 命令行参数的数目。
     [G] ARGIND 命令行中当前文件的位置（从0开始算）。
     [N] ARGV 包含命令行参数的数组。
@@ -105,28 +77,65 @@ awk内置变量（预定义变量）
     [N] RSTART 由match函数所匹配的字符串的第一个位置。
     [N] RLENGTH 由match函数所匹配的字符串的长度。
     [N] SUBSEP 数组下标分隔符（默认值是34）。
+
+awk 常用内建函数
+----
+
+index(string,search_string):返回search_string在string中出现的位置
+
+sub(regex,replacement_str,string):将正则匹配到的第一处内容替换为replacement_str;
+
+match(regex,string):检查正则表达式是否能够匹配字符串；
+
+length(string)：返回字符串长度
+
+
+    echo | awk 
+
+
+
+> getline 命令是 awk 当中非常强大的一个功能
+
+getline命令执行后，awk会设置NF，NR，FNR和$0等这些内部变量。
+
+    seq 10 | awk '{getline; print $0}'
+    2
+    4
+    6
+    8
+    10
+    
+那么getline究竟是实现什么功能呢？正如getline的翻译，得到行，但是注意，得到的并不是当前行，而是当前行的下一行。以上面的例子来分析，awk首先读取到了第一行，就是1，然后getline，就得到了1下面的第二行，就是2，因为getline之后，awk会改变对应的NF，NR，FNR和$0等内部变量，所以此时的$0的值就不再是1，而是2了，然后将它打印出来
+
+> getline 获取当前行的下一行
+
+    seq 10 | awk '{print $0;getline}'
+    1
+    3
+    5
+    7
+    9
+
+打印偶数行的唯一区别就是print $0和getline的顺序不一样。因为getline在print $0之后，此时的$0仍然是第一行。然后getline，$0变成了下一行2。依次类推，就打印出了奇数行。
+
+
+getline也可以用来执行一个UNIX命令，并得到它的输出。下面例子通过getline得到系统的当前时间
+
+    $ awk 'BEGIN {"date" | getline; print $0}'
+    Sun Aug 19 10:19:24 CST 2018
+
+
 示例
 --
 
-    echo -e "line1 f2 f3nline2 f4 f5nline3 f6 f7" | awk '{print "Line No:"NR", No of fields:"NF, "$0="$0, "$1="$1, "$2="$2, "$3="$3}' 
-    Line No:1, No of fields:3 $0=line1 f2 f3 $1=line1 $2=f2 $3=f3
-    Line No:2, No of fields:3 $0=line2 f4 f5 $1=line2 $2=f4 $3=f5
-    Line No:3, No of fields:3 $0=line3 f6 f7 $1=line3 $2=f6 $3=f7
-    使用print $NF可以打印出一行中的最后一个字段，使用$(NF-1)则是打印倒数第二个字段，其他以此类推：
-    
-    echo -e "line1 f2 f3n line2 f4 f5" | awk '{print $NF}'
-    f3
-    f5
-    echo -e "line1 f2 f3n line2 f4 f5" | awk '{print $(NF-1)}'
-    f2
-    f4
 打印每一行的第二和第三个字段：
 
     awk '{ print $2,$3 }' filename
     
 统计文件中的行数：
 
-awk 'END{ print NR }' filename
+    awk 'END{ print NR }' filename
+
 以上命令只使用了END语句块，在读入每一行的时，awk会将NR更新为对应的行号，当到达最后一行NR的值就是最后一行的行号，所以END语句块中的NR就是文件的行数。
 
 一个每一行中第一个字段值累加的例子：
@@ -140,3 +149,31 @@ awk 'END{ print NR }' filename
     5+
     等于
     15
+
+传递外部变量
+    
+    var=1000
+    echo | awk '{print vara}' vara=$var #  输入来自stdin
+    awk '{print vara}' vara=$var file # 输入来自文件
+
+用样式对awk处理的行进行过滤
+
+    awk 'NR < 5' #行号小于5
+    awk 'NR==1,NR==4 {print}' file #行号等于1和4的打印出来
+    awk '/linux/' #包含linux文本的行（可以用正则表达式来指定，超级强大）
+    awk '!/linux/' #不包含linux文本的行
+    
+    seq 100 | awk '$NF > 10 {print $0}' # 过滤大于10的数据
+
+设置定界符 :使用-F来设置定界符（默认为空格）:
+
+    awk -F: '{print $NF}' /etc/passwd
+
+读取命令输出: 使用getline，将外部shell命令的输出读入到变量cmdout中:
+
+    echo | awk '{"grep root /etc/passwd" | getline cmdout; print cmdout }'
+
+
+    
+
+

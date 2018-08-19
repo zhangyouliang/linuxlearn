@@ -29,5 +29,27 @@
     # 查看连接 ip
     netstat -ntu | awk '{print $5}' | cut -d: -f1 | uniq -c | sort -nr
     
+    # 截取文件的第二列和第4列
+    cut -f2,4 filename
+    
+    # 去除文件第3列,显示其他列
+    cut -f3 --complement filename
+    
+    # -d 指定定界符
+    cut -f2 -d';' filename
+    
+cut 取值范围
+
+    N-   第N个字符到结尾
+    -M   从第一个到第M个
+    N-M  N到M个字段
+
+cut 取的单位
+
+    -b 以字节为单位
+    -c 以字符为单位
+    -f 以字段为单位
+
+
     
     

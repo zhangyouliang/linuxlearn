@@ -179,8 +179,11 @@ xargs 本身的功能并不多，但是他跟其他的Linux 指令一起搭配�
 因为档名包含空白，所以这会会造成rm指令无法正确删除该档案。
 
 这个时候我们可以将find指令加上-print0参数，另外将xargs指令加上-0参数，改成这样
-
-    find . -name "*.c" -print0 | xargs -0 rm -rf
+    
+    # -p 交互
+    find . -name "*.c" -print0 | xargs -0 rm -rf -p
+    
+    
 如此一来，即可正确处理包含空白字元的档案名称。
 
 命令列长度的限制
