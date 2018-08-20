@@ -260,6 +260,57 @@ supervisor的配置文件默认是不全的，不过在大部分默认的情况�
 
 更多的参数可以看[官方文档](http://supervisord.org/configuration.html)和[supervisor(一)基础篇](http://lixcto.blog.51cto.com/4834175/1539136)的说明。
 
+issue
+----
+
+## 01 解决supervisord进程导致的队列时差问题
+---
+
+排查过程:
+
+- 排查代码(代码的时区,系统时间和时区)
+- 排查 supervisord 守护京城
+
+经过一系列的排查，以及对比本地与服务器的运行结果，发现不是代码上的问题，也不是服务器上的时区问题，而是之前一个老旧的supervisord进程缓存的配置问题。 
+
+问题发现: 手动运行 `python app.py`,出现下面语句这正常
+
+
+    Mon, 20 Aug 2018 14:32:27 logger.py[line:25] INFO handleDeleteDirtyJob (trigger: cron[hour='0', minute='5'], pending)
+
+`supervisor restart` 运行则不会出现,说明问题出现在 `supervisor`上面
+
+
+解决步骤:
+
+通过`ps -ef | grep supervisor`找到关于supervisord的一些进程：
+
+    root     11894     1  0 14:26 ?        00:00:00 /usr/bin/python /usr/local/bin/supervisord -c /etc/supervisord.conf
+
+使用命令`kill -s SIGTERM 11894` 终止pid为 11894 的进程，然后输入命令：
+
+    supervisord -c /etc/supervisord.conf
+
+重新将supervisord指定配置文件，更新新的配置到supervisord
+
+    supervisorctl update
+
+重新启动配置中的所有程序
+
+    supervisorctl reload
+
+
+最后重启所有进程`supervisorctl restart all`即可
+
+查看日志,正常输出信息    
+    
+    Mon, 20 Aug 2018 14:32:27 base.py[line:433] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+    Mon, 20 Aug 2018 14:32:27 logger.py[line:25] INFO ----- supervisor trigger 输出:  -----
+    Mon, 20 Aug 2018 14:32:27 logger.py[line:25] INFO handleDeleteDirtyJob (trigger: cron[hour='0', minute='5'], pending)
+    Mon, 20 Aug 2018 14:32:27 base.py[line:867] INFO Added job "handleDeleteDirtyJob" to job store "default"
+    Mon, 20 Aug 2018 14:32:27 base.py[line:159] INFO Scheduler started
+
+
 总结：
 ---
 
