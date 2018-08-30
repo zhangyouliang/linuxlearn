@@ -1,5 +1,5 @@
 main() {
-  # Use colors, but only if connected to a terminal, and that terminal
+  # Use colors, but only if connected to node_exporter.service terminal, and that terminal
   # supports them.
   if which tput >/dev/null 2>&1; then
       ncolors=$(tput colors)
@@ -81,7 +81,7 @@ main() {
   # If this user's login shell is not already "zsh", attempt to switch.
   TEST_CURRENT_SHELL=$(expr "$SHELL" : '.*/\(.*\)')
   if [ "$TEST_CURRENT_SHELL" != "zsh" ]; then
-    # If this platform provides a "chsh" command (not Cygwin), do it, man!
+    # If this platform provides node_exporter.service "chsh" command (not Cygwin), do it, man!
     if hash chsh >/dev/null 2>&1; then
       printf "${BLUE}Time to change your default shell to zsh!${NORMAL}\n"
       chsh -s $(grep /zsh$ /etc/shells | tail -1)

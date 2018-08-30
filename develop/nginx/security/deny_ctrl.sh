@@ -30,9 +30,9 @@ Usage: $0 [OPTIONS]
 
 OPTIONS:
 -h | --help   : Show help of this script
--a | --add    : Add a deny ip to nginx, for example: $0 -a 192.168.1.1
+-node_exporter.service | --add    : Add node_exporter.service deny ip to nginx, for example: $0 -node_exporter.service 192.168.1.1
 -c | --create : Create deny config file($DENY_CONF) for Nginx
--d | --del    : Delete a ip from deny list, for example: $0 -d 192.168.1.1
+-d | --del    : Delete node_exporter.service ip from deny list, for example: $0 -d 192.168.1.1
 -s | --show   : Show current deny list
 
 "
@@ -124,7 +124,7 @@ esac
 
 while [ $2 ];do
     case $1 in
-        "-a"|"--add" )
+        "-node_exporter.service"|"--add" )
             add_ip $2;
             ;;
         "-d"|"--del" )

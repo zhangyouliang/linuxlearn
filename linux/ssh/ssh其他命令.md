@@ -1,5 +1,7 @@
 > ssh 相关命令
 
+> [参考](http://www.zsythink.net/archives/2407)
+
 ssh-copy-id
 ---
 > 把本地主机的公钥复制到远程主机的authorized_keys文件上，ssh-copy-id命令也会给远程主机的用户主目录（home）和~/.ssh, 和~/.ssh/authorized_keys设置合适的权限。
