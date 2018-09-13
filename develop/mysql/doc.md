@@ -100,6 +100,11 @@
     SHOW VARIABLES	服务器配置变量
 
 
+查看最大连接数: `show variables like '%max_connections%'`
+
+查看连接进程: `show status like 'Threads%';`
+
+
 #### # ip 处理
 > inet_aton()和inet_ntoa()
 
