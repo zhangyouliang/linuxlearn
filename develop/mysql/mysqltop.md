@@ -7,7 +7,7 @@ Top 命令可以查看操作系统的性能状态,mytop 命令类似 top 命令�
 QPS,慢SQL等等
 
 
-    MySQL on rm-bp179a336k784073sio.mysql.rds.aliyuncs.com (5.6.16)       load  up 14+23:15:09 [14:42:39] ①
+    MySQL on rm-bpxxxxx073sio.mysql.rds.aliyuncs.com (5.6.16)       load  up 14+23:15:09 [14:42:39] ①
      Queries: 465.4M   qps:  377 Slow:    5.1k         Se/In/Up/De(%):    55/01/01/00  ②
      Sorts:    10 qps now:  524 Slow qps: 0.0  Threads:   15 (   4/  91) 55/01/02/00  ③
      Key Efficiency: 100.0%  Bps in/out: 68.6k/416.8k   Now in/out: 98.3k/596.0k   ④
