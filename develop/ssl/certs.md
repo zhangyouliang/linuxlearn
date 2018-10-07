@@ -108,7 +108,8 @@ OpenSSL 相当于SSL的一个实现，如果把SSL规范看成OO中的接口，�
     openssl x509 -noout -text -in server.crt
 
 #### # cfssl 相关操作
-> 具体见[仓库](git@gitee.com:whatdy/k8s.git) 当中的 ssl_example/README.md
+
+具体见[点击这里](https://gitee.com/whatdy/k8s/blob/master/ssl_example/README.md) 
 
 
 
