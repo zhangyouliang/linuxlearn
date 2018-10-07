@@ -142,4 +142,9 @@ exec 解释:
 {} 花括号标识前面 find 查找出来的文件名字
 
     find . -type f -exec ls -l {} \;
-
+    # 搜索 .md 文件,并且显示文件名称
+    find . -name '*.md' -exec grep -l 'open' {} \; 
+    # 搜索 .md 文件当中,包含 'golang.org/x' 的全部文件(缺点:不显示文件名)
+    find . -type f -name "*.md" | xargs cat | grep "golang.org/x"
+    # 搜索文件内容,并且显示文件名称
+    grep "golang.org/x" -rn 'open' . --include *.md

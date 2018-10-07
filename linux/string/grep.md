@@ -43,4 +43,5 @@
 
     # 搜索包含 123 或者 abc
     grep -E '123|abc' filename
-     
+    # 搜索文件内容,并且显示文件名称
+    grep "golang.org/x" -rn 'open' . --include *.md
