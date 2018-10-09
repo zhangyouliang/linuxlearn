@@ -258,18 +258,22 @@ tab 标签
     :tabs  显示已打开标签页的列表，并用“>”标识出当前页面，用“+”标识出已更改的页面。
     关闭标签页
     :tabc  关闭当前标签页。:tabo  关闭所有的标签页。
+    :tabo N 把当前标签页移到第 N 个标签页之后。用 0 使当前标签页成为首个标签页。如果没有 N，当前标签页成为最后一个。
+    
 
 ## 切换标签
-    
+ 
     :tabn或gt  移动到下一个标签页。
     :tabp或gT  移动到上一个标签页。
     :tabfirst或:tabr  移动到第一个标签页。
     :tablast  移动到最后一个标签页。
-    
+    :tabr[ewind]  *:tabfir* *:tabfirst* *:tabr* *:tabrewind* 转到第一个标签页。 
+
+
     快捷键:
     shfit + left 上一个
     shift + right 下一个
-    
+
     # 创建 mark
     m[a-zA-Z] add mark
     # 快速跳转到 mark

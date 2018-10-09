@@ -1,5 +1,6 @@
 keepalived 
 ====
+> 参考:[keepalived实现服务高可用](https://www.cnblogs.com/clsn/p/8052649.html)
 
 > 参考: [https://blog.csdn.net/u010066807/article/details/50659714](https://blog.csdn.net/u010066807/article/details/50659714)
 
@@ -136,7 +137,7 @@ LVSBackup配置文件
 	scp /etc/keepalived/keepalived.conf 10.10.100.101:/etc/keepalived/keepalived.conf
 	vim /etc/keepalived/keepalived.conf
 
-> 只用修改  state BACKUP  priority 90
+> 修改  state BACKUP  priority 90, router_id 
 
 	! Configuration File for keepalived
 	
