@@ -1,3 +1,5 @@
+ipvs 模块加载
+-------
 
 安装 ipvsadm
 
@@ -23,3 +25,14 @@
     done
     systemctl enable --now systemd-modules-load.service
 
+
+
+#### # 关于keepalived执行后日志狂刷IPVS: Can't initialize ipvs: Protocol not available的问题
+
+    # 加载模块
+    modprobe ip_vs，modprobe ip_vs_wrr
+    # 查看加载模块
+    lsmod | grep ip_vs
+
+    # 网络查看
+    nmcli con show

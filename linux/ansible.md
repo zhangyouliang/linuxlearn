@@ -70,4 +70,10 @@
     127.0.0.1 | success >> {
         "changed": false
     }
+    
+    # 安装程序
+    ansible all -u root -m apt -a "name=sshpass state=installed"
+    # 卸载程序
+    ansible all -u root -m apt -a "name=sshpass state=removed"
+
 

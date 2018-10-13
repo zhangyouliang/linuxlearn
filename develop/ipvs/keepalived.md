@@ -142,14 +142,14 @@ LVSBackup配置文件
 	! Configuration File for keepalived
 	
 	global_defs {
-	   router_id LVSMaster
+	   router_id LVSBackup # 修改
 	}
 	
 	vrrp_instance VI_1 {
-	    state BACKUP
+	    state BACKUP  # 修改 
 	    interface eth0
 	    virtual_router_id 100
-	    priority 90
+	    priority 90 # 修改
 	    advert_int 1
 	    authentication {
 	        auth_type PASS
