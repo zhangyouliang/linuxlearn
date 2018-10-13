@@ -1,3 +1,5 @@
+> [参考文章:印象笔记](http://seanlook.com/2015/05/18/nginx-keepalived-ha/)
+
 keepalived + nginx 负载测试
 -----
 

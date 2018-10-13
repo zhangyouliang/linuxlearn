@@ -4,6 +4,8 @@ keepalived
 
 > 参考: [https://blog.csdn.net/u010066807/article/details/50659714](https://blog.csdn.net/u010066807/article/details/50659714)
 
+> 注意需要四台机器:而不是两台机器上面分别安装 keepalived + nginx 测试(被坑了老半天)
+
 hostname |  ip | 备注
 ---|---|---
 LVSMaster  |  eth0:192.168.31.198    eth1:10.10.100.100 |
@@ -206,6 +208,29 @@ LVSBackup配置文件
 	        }
 	    }
 	}
+
+RealserverNet1,RealserverNet2 配置
+----
+> 貌似可以忽律
+
+	echo 1 > /proc/sys/net/ipv4/conf/lo/arp_ignore
+	echo 2 > /proc/sys/net/ipv4/conf/lo/arp_announce
+	echo 1 > /proc/sys/net/ipv4/conf/all/arp_ignore
+	echo 2 > /proc/sys/net/ipv4/conf/all/arp_announce
+	
+	ifconfig lo:1 192.168.31.200  broadcast 192.168.31.200  netmask 255.255.255.255 up
+	route add -host 192.168.31.200  dev lo:1
+
+	ifconfig lo:1 10.10.100.200  broadcast 10.10.100.200  netmask 255.255.255.255 up
+	route add -host 10.10.100.200  dev lo:1
+
+
+	# 去除网络配置
+	route delete -host 192.168.31.200  dev lo:1
+	ifconfig lo:1 down
+
+	route delete -host 10.10.100.200  dev lo:1
+	ifconfig lo:1 down
 
 启动
 -----
