@@ -14,3 +14,5 @@
 
     ssh-copy-id user@server
     ssh-copy-id -i ~/.ssh/id_rsa.pub user@server
+    # 指定端口
+    ssh-copy-id "-p 65535 user@192.168.3.102"
