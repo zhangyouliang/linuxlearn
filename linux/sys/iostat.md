@@ -8,6 +8,7 @@
 
 命令参数
 --
+
     -C 显示CPU使用情况
     -d 显示磁盘使用情况
     -k 以 KB 为单位显示
@@ -21,16 +22,16 @@
 
 
 显示所有设备负载情况
-    
+
     iostat -x
     Linux 4.4.0-117-generic (app-10.0.0.149-pro) 	08/18/2018 	_x86_64_	(4 CPU)
-    
+
     avg-cpu:  %user   %nice %system %iowait  %steal   %idle
                7.16    0.00    3.28    6.82    0.00   82.74
-    
+
     Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
     vda               0.00    23.29    0.46   23.90     5.12   212.07    17.83     0.33   13.34    3.99   13.52   0.57   1.38
-    
+
 
 cpu属性值说明：
 
@@ -40,7 +41,7 @@ cpu属性值说明：
     %iowait：CPU等待输入输出完成时间的百分比。
     %steal：管理程序维护另一个虚拟处理器时，虚拟CPU的无意识等待时间百分比。
     %idle：CPU空闲时间百分比。
-    
+
 注：如果%iowait的值过高，表示硬盘存在I/O瓶颈，%idle值高，表示CPU较空闲，如果%idle值高但系统响应慢时，有可能是CPU等待分配内存，此时应加大内存容量。%idle值如果持续低于10，那么系统的CPU处理能力相对较低，表明系统中最需要解决的资源是CPU。
 
 disk属性值说明：
@@ -76,22 +77,23 @@ disk属性值说明：
 
     root@app-10:~# iostat -x 1 3
     Linux 4.4.0-117-generic (app-10.0.0.149-pro) 	08/18/2018 	_x86_64_	(4 CPU)
-    
+
     avg-cpu:  %user   %nice %system %iowait  %steal   %idle
                7.16    0.00    3.28    6.81    0.00   82.74
-    
+
     Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
+    A
     vda               0.00    23.30    0.46   23.91     5.12   212.09    17.83     0.33   13.34    3.99   13.52   0.57   1.38
-    
+
     avg-cpu:  %user   %nice %system %iowait  %steal   %idle
                4.55    0.00    2.27    0.00    0.00   93.18
-    
+
     Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
     vda               0.00     0.00    0.00   13.00     0.00    52.00     8.00     0.00    0.31    0.00    0.31   0.31   0.40
-    
+ 
     avg-cpu:  %user   %nice %system %iowait  %steal   %idle
                6.31    0.00    2.78    0.25    0.00   90.66
-    
+ 
     Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util
     vda               0.00   155.00    0.00   28.00     0.00   732.00    52.29     0.03    1.00    0.00    1.00   0.86   2.40
 
@@ -101,13 +103,13 @@ disk属性值说明：
 
     /root$iostat -d -k 1 1
     Linux 2.6.32-279.el6.x86_64 (colin)   07/16/2014      _x86_64_        (4 CPU)
-    
+ 
     Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn
     sda               1.95         0.74        35.44    4572712  218559410
     dm-0              3.08         0.28        12.17    1696513   75045968
     dm-1              5.83         0.46        23.25    2857265  143368744
     dm-2              0.01         0.00         0.02      11965     144644
-    
+ 
 - tps：该设备每秒的传输次数（Indicate the number of transfers per second that were issued to the device.）。“一次传输”意思是“一次I/O请求”。多个逻辑请求可能会被合并为“一次I/O请求”。“一次传输”请求的大小是未知的。
 - kB_read/s：每秒从设备（drive expressed）读取的数据量；
 - kB_wrtn/s：每秒向设备（drive expressed）写入的数据量；
