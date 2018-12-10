@@ -14,6 +14,17 @@
     # ubuntu/debian install
     apt install supervisor
     
+supervisor 开机自启
+---
+    
+    # Ubuntu16.04 
+    /lib/systemd/system/supervisord.service # 当前目录下面的 supervisord.service
+    # 启动服务
+    systemctl enable supervisord
+    # 验证一下是否为开机启动
+    systemctl is-enabled supervisord
+    
+
 配置文件
 ---
 
