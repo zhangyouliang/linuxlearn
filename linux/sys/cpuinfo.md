@@ -2,7 +2,7 @@
 
 逻辑 cpu 数
     
-    cat /proc/cupinfo | grep "processor" | wc -l
+    cat /proc/cpuinfo | grep "processor" | wc -l
     4
 
 cpu 核心数
