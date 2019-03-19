@@ -37,41 +37,4 @@
 
 * 配置日志打点
 
-参考: http://www.cnblogs.com/EasonJim/p/8413715.html?spm=a2c4e.11153940.blogcont587845.9.3d0a324emR7f0U
-
-
-日志调试的思路：
-
-- 1、先在指定的表和链增加日志的输出。
-- 2、指定日志的级别以及日志的前缀，注意，前缀非常重要，可以加快问题的分析。
-- 3、最后就是使用ping或者crul进行访问测试，观察日志。
-- 4、iptables是按顺序执行的，但是如果在某一处地方跳转了之后以下的规则就不会再执行，这一个可以日志打点后再慢慢观察发现。
-
-日志文件的配置：
-
-1、在rsyslog.conf添加配置
-
-`/etc/rsyslog.conf` 中添加不同的日志级别
-
-    kern.warning     /var/log/iptables.log
-    kern.debug       /var/log/iptables.log
-    kern.info        /var/log/iptables.log
-
-不过推荐全部日志都记录： 
-
-    kern.*     /var/log/iptables.log
-重启日志配置：
-
-    /etc/init.d/rsyslogd restart
-
-如果不进行配置，那么这些日志会记录到`/var/log/messages`中，当然，在`/var/log/kern.log`也可以找得到。
-
-iptables日志打点配置：
-
-比如下面针对`nat`表的 `POSTROUTING`链进行日志打点
-
-    iptables -t nat -A POSTROUTING -d 192.168.0.61 -p tcp --dport 9000 -j LOG --log-prefix "*** nat-POSTROUTING ***" --log-level warning
-
---log-prefix：日志前缀
-
---log-level：日志级别
+参考: http://www.cnblogs.com/EasonJim/p/8413563.html
