@@ -1,14 +1,19 @@
-ubuntu 常用安装包
+ubuntu 常用安装包[[官方包搜索地址]](https://packages.ubuntu.com/)
 =====
 
-
-    iputils-ping: 安装 ping 相关命令
-    net-tools:
+* iputils-ping: 安装 ping 相关命令
+* net-tools:
     Linux平台NET-3网络分发包，包括arp、hostname、ifconfig、netstat、rarp、route、plipconfig、slattach、mii-tool、iptunnel和ipmaddr工具。
-    apache2-utils: apache 工具安装
-    rinetd/xenial: 端口转发工具
-    openssl, libssl-dev : ssl 相关库
-    glances: 流量监控工具
+* apache2-utils: apache 工具安装
+* rinetd/xenial: 端口转发工具
+* openssl, libssl-dev : ssl 相关库
+* glances: 流量监控工具
+* [linux-tools-generic](https://packages.ubuntu.com/cosmic/amd64/linux-tools-4.18.0-10-generic/filelist): 
+    * perf
+    * cpupower
+    * acpidbg
+    * turbostat
+    * .....
 
 
 ubuntu 更换阿里数据源

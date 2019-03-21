@@ -1,3 +1,5 @@
+> [参考文档](https://www.cnblogs.com/kevingrace/p/6496899.html)
+
 > tmux 应用程序的名称来源于终端(terminal)复用器(muxer)或多路复用器换句话说，它可以将您的单终端会话分成多个会话。 它管理窗口和窗格：
 
 - 窗口（window）是一个单一的视图 - 也就是终端中显示的各种东西。
