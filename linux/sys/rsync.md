@@ -45,7 +45,7 @@
     # 删除一个文件 d
     rm -rf src/d
     # 从目标目录里面删除无关的文件
-    rsync -av --delete src/ 172.16.22.12:/data/test/dest/ --delete
+    rsync -av  src/ 172.16.22.12:/data/test/dest/ --delete
 
 
 
