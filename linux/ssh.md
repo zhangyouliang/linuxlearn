@@ -234,3 +234,33 @@ ssh -p 2222 localhost
 
 例如：-R X:Y:Z 就是把我们内部的Y机器的Z端口映射到远程机器的X端口上。
 ```
+
+## ssh 跳过跳板机操作
+
+* 利用 `-o ProxyCommand`
+
+    ssh -o ProxyCommand='ssh -q root@<跳板机> -W %h:%p' root@<目标主机>
+    # -W 表示将发送到跳板机的全部操作,转发到目标主机
+
+* 利用 `~/.ssh/config`
+
+    Host ss          
+        HostName <跳板机>
+        User root 
+        Port 22   
+    # 利用 nc 进行转发
+    #Host 10.0.0.148
+    #    User root
+    #    ProxyCommand ssh root@<跳板机> nc 10.0.0.148 %p  2>/dev/null  
+    Host 10.0.0.148
+        HostName 10.0.0.148
+        User root 
+        Port 22   
+        ProxyCommand ssh -q -W %h:%p ss
+    Host *           
+        Port 22   
+        User root 
+
+`10.0.0.148` 为目标主机
+
+`nc <目标主机> port` 发送到跳板机的指令,全部转发到<目标主机>
