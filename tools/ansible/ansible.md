@@ -1,5 +1,5 @@
 > Ansible是一个配置管理和配置工具
-> [参考](https://blog.csdn.net/pushiqiang/article/details/78126063)
+> [参考](https://ansible-tran.readthedocs.io/en/latest/docs/intro_inventory.html#id13)
 
 安装
 ---
@@ -30,6 +30,11 @@
     --private-key=PRIVATE_KEY_FILE_PATH 使用指定路径的秘钥建立认证连接
     -m DIRECTORY --module-path=DIRECTORY 指定module的目录来加载module，默认是/usr/share/ansible
     -c CONNECTION --connection=CONNECTION 指定建立连接的类型，一般有ssh ，local
+    -s sudo 运行
+    -k, --ask-pass  提示输入 ssh 登录密码，当使用密码验证登录的时候用 
+    -C check 只是测试一下会改变什么内容，不会真正去执行
+    -u REMOTE_USER, --user=REMOTE_USER ssh   连接的用户名，默认用 root，ansible.cfg 中可以配置
+
     
     -m apt 使用 apt 模块将运行相同的命令
     -a "name=nginx state=installed update_cache=true" 提供apt模块的参数，包括软件包名称，所需的结束状态以及是否更新软件包存储库缓存
@@ -77,3 +82,48 @@
     ansible all -u root -m apt -a "name=sshpass state=removed"
 
 
+Inventory
+---
+变量类型
+- 主机变量
+- 组变量
+- 把一个组作为另一个组的子成员
+- 分文件定义 Host 和 Group 变量
+
+Inventory 参数的说明[参考:intro_inventory.html#id13](https://ansible-tran.readthedocs.io/en/latest/docs/intro_inventory.html#id13)
+
+使用模板:
+
+    /tmp/motd.j2
+    Welcome, I am templated with a value of a={{ a }}, b={{ b }}, and c={{ c }}
+
+    ansible webserver -m setup
+    ansible webserver -m template -a "src=/tmp/motd.j2 dest=/etc/motd"
+
+常用模块
+---
+> shell 和 command 的区别：shell 模块可以特殊字符，而 `command` 是不支持
+
+> ansible 操作目标 -m 模块名 -a 模块参数
+
+> 模块文档查看: ansible-doc 模块
+
+* ping 测试模块
+* setup  远程查看主机的配置信息
+* command 远程执行命令
+    * ansible hostname -m command -a "ls ~"
+* raw 执行原始命令
+    * ansible hostname -m raw -a "docker ps"   
+* shell 远程节点执行模块
+    * ansible hostname -m shell -a "ls ~"
+* script 在远程执行本地脚本
+    * ansible hostname -m script -a "~/test.sh"
+* copy 复制模块
+    * ansible hostname -m script -a "src=~/test.sh dest=~/scripts mode=0755"
+* file 设置文件属性
+* fetch 远程获取
+* service 服务启动或者管理模块
+* yum 软件安装模块
+* user 用户管理
+* mout 主机挂载模块
+* sysctl 包管理模块
