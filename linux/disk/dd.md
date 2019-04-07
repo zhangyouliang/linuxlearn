@@ -1,6 +1,7 @@
 > dd:  用指定大小的块拷贝一个文件，并在拷贝的同时进行指定的转换。
 
 
+
 一. 参数
 -----
 
@@ -94,8 +95,12 @@
 
 12.测试硬盘的读写速度
 
-    dd if=/dev/zero bs=1024 count=1000000 of=/root/1Gb.file
-    dd if=/root/1Gb.file bs=64k | dd of=/dev/null
+    # 写入速度
+    dd if=/dev/zero bs=1024k count=1024 of=/root/1Gb.file
+    # 读取速度
+    # 首先清除内存的缓存，以确保这个文件确实是从驱动盘读取的
+    sync && echo 3 > /proc/sys/vm/drop_caches
+    dd if=/root/1Gb.file bs=1024k of=/dev/null
     
 通过以上两个命令输出的命令执行时间，可以计算出硬盘的读、写速度。
 
