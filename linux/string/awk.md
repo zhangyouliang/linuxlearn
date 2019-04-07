@@ -17,7 +17,15 @@ awk命令格式和选项
     -v var=value   赋值一个用户定义变量，将外部变量传递给awk
     -f scripfile  从脚本文件中读取awk命令
     -m[fr] val   对val值设置内在限制，-mf选项限制分配给val的最大块数目；-mr选项限制记录的最大数目。这两个功能是Bell实验室版awk的扩展功能，在标准awk中不适用。
-    
+
+awk 模式
+----
+
+- /正则表达式/：使用通配符的扩展集。
+- 关系表达式：使用运算符进行操作，可以是字符串或数字的比较测试。
+- 模式匹配表达式：用运算符~（匹配）和~!（不匹配）。
+- BEGIN语句块、pattern语句块、END语句块：参见awk的工作原理
+
 
 awk的工作原理
 --
@@ -174,6 +182,5 @@ getline也可以用来执行一个UNIX命令，并得到它的输出。下面例
     echo | awk '{"grep root /etc/passwd" | getline cmdout; print cmdout }'
 
 
-    
 
 

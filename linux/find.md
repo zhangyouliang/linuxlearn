@@ -15,6 +15,7 @@
 - -exec ： -ok是-exec的一个选项，加上之后执行command时会询问用户
 - {} \：注意是反斜杠，大括号和反斜杠之间有一个空格
 - -;：注意！！！！分号必不可少！！！
+- -print0 将分隔符 \n 替换为 NULL(可以结合 xargs -0 使用,删除带有空格的文件)
 
 命令参数
 ----
@@ -111,9 +112,12 @@
 例子
 ----
 
+选项
 
-    atime n  查找系统中最后N分钟访问的文件
-    amin n  查找系统中最后n*24小时访问的文件
+    - amin n  查找系统中最后N分钟访问的文件
+    - atime n  查找系统中最后n*24小时访问的文件
+
+使用
 
     # 查找今天的(24小时内)
 
@@ -141,10 +145,21 @@ exec 解释:
 
 {} 花括号标识前面 find 查找出来的文件名字
 
+> cd $GOPATH/src/golang.org/x 
+
+    # 列出全部文件,并且执行 ls -l
     find . -type f -exec ls -l {} \;
+
     # 搜索 .md 文件,并且显示文件名称
     find . -name '*.md' -exec grep -l 'open' {} \; 
+
     # 搜索 .md 文件当中,包含 'golang.org/x' 的全部文件(缺点:不显示文件名)
     find . -type f -name "*.md" | xargs cat | grep "golang.org/x"
+
     # 搜索文件内容,并且显示文件名称
-    grep "golang.org/x" -rn 'open' . --include *.md
+    # -r 递归
+    # -n 显示行号
+    grep "golang.org/x" -rn .  --include='*.go'
+    
+    # find 结合 xargs,grep 使用
+    find . -type f -name "*.go" | xargs grep -n windows
