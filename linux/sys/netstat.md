@@ -50,7 +50,7 @@
     netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n | awk '{sum+=$1} END{ print "total="sum }'
 
     # 连接数 >5 的链接情况
-    netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n | awk '{ if($1>5) print $1 } {print $1" "$2}' 
+    netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n | awk '{ if($1>5) print $1" "$2 }'
 
 实时查看连接数
     
