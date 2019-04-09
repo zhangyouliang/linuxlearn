@@ -43,6 +43,14 @@
     # 查看access.log 当中的ip数量,并且统计出来
     cat access.log| awk -F \" '{print $7}' | awk -F \| '{++S[$2]} END {for(a in S) print a, S[a]}'
     
+    # 根据 ip 统计连接数
+    netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+
+    # 统计总连接数
+    netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n | awk '{sum+=$1} END{ print "total="sum }'
+
+    # 连接数 >5 的链接情况
+    netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n | awk '{ if($1>5) print $1 } {print $1" "$2}' 
 
 实时查看连接数
     

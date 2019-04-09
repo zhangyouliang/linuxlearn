@@ -1,6 +1,7 @@
 > DDOS的全称是Distributed Denial of Service，即"分布式拒绝服务攻击"，是指击者利用大量“肉鸡”对攻击目标发动大量的正常或非正常请求、耗尽目标主机资源或网络资源，从而使被攻击的主机不能为合法用户提供服务。
 
-> [参考](https://www.cnblogs.com/kevingrace/p/6756515.html)
+> [参考01](https://www.cnblogs.com/kevingrace/p/6756515.html)
+> [参考02](https://blog.csdn.net/u013697959/article/details/77369931)
 
     
 `DDOS攻击的本质是`： 利用木桶原理，寻找利用系统应用的瓶颈；阻塞和耗尽；当前问题：用户的带宽小于攻击的规模，噪声访问带宽成为木桶的短板。
