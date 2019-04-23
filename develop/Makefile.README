@@ -14,6 +14,7 @@
 a.txt: b.txt c.txt
 	echo 11
 
+
 # 伪目标
 # 但是当正好有个文件为 clean 的时候,就会以为这个文件已经存在,就不会进行编译了
 .PHONY: clean
@@ -41,6 +42,12 @@ VARIABLE2 := value2
 # 只有在该变量为空时才设置值。
 VARIABLE2 ?= value3
 
+# define 和 info 函数
+SHELL := /bin/bash
+define ALL_HELP_INFO
+endef
+test_info:
+	$(info KUBE_GOFLAGS is now deprecated. Please use GOFLAGS instead.)
 
 test:
 	# @# 关闭回声
