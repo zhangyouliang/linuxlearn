@@ -71,7 +71,7 @@ A 主机:
 
     wget https://github.com/fatedier/frp/releases/download/v0.26.0/frp_0.26.0_linux_amd64.tar.gz
     mkdir /opt/frp
-    tar -C /opt/frp -xvf frp_0.26.0_linux_amd64.tar.gz 
+    tar -C /opt/frp -xvf frp_0.26.0_linux_amd64.tar.gz  --strip-components 1
     # 修改 frps.ini 对应路径
     cp /opt/frp/systemd/frps.service /lib/systemd/system/frps.service
     systemctl start frps
