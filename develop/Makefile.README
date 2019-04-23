@@ -1,0 +1,69 @@
+
+# 参考:  http://www.ruanyifeng.com/blog/2015/02/make.html
+# 参考: https://seisman.github.io/how-to-write-makefile/conditionals.html
+
+
+# make -f Makefile
+
+# 表示 a.txt 需要依赖  b.txt,c.txt 文件
+
+# 格式
+# <target>: <prerequireties>
+# [tab] <commands>
+
+a.txt: b.txt c.txt
+	echo 11
+
+# 伪目标
+# 但是当正好有个文件为 clean 的时候,就会以为这个文件已经存在,就不会进行编译了
+.PHONY: clean
+clean:
+	rm *.o
+
+# 前置条件
+source.txt:
+	echo "this is the source"
+result.txt: source.txt
+	echo "this is result.txt"
+
+# makefile 当中,每行命令在一个单独的shell 中执行,这些 shell 之间没有继承关系
+var-lost1:
+	# 错误方式
+	export foo=bar
+	echo "foo=[$$foo]"
+
+var-lost2:
+	export foo=bar \
+	echo "foo=[$$foo]"
+
+VARIABLE1 = value1
+VARIABLE2 := value2
+# 只有在该变量为空时才设置值。
+VARIABLE2 ?= value3
+
+
+test:
+	# @# 关闭回声
+	@# 这是测试
+	# 正常输出
+	@echo TODO
+	@echo $(VARIABLE1)
+	@echo $(VARIABLE2)
+
+# 判断 $(VARIABLE1) 是否等于 value1
+ifeq ($(VARIABLE1),value1)
+	@echo "$VARIABLE1 == value1"
+else
+	@echo "$VARIABLE1 != value1"
+endif
+
+LIST= one two three
+all:
+	for i in $(LIST);do \
+		echo $$i;\
+	done
+
+# error 错误输出
+ERR = $(error found an error!)
+.PHONY: err
+err: $(ERR)
