@@ -18,6 +18,9 @@ linux下tar命令解压到指定的目录 ：
 
     tar -cvpf /tmp/system.tar --directory=/ --exclude=proc --exclude=sys --exclude=dev --exclude=run --exclude=boot .    
 
+解压文件去除第一层文件夹  (--strip-path 或者 --strip-components )
+
+    tar zxvf test.tar.gz --strip-components 1 -C web
     
 ---------------------------------------------------------------------------------------
 tar 解压缩命令
