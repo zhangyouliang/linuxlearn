@@ -96,7 +96,11 @@ curl 测试解析过程
 可以看到 `time_appconnect` 和 `time_redirect` 都不是 0 了，其中 SSL 协议处理时间为 `328-18=310ms` 。而且 `pretransfer` 和 `starttransfer` 的时间都缩短了，这是重定向之后请求的时间。
 
 
+测试 100 次,并且显示请求时间
 
+    for i in `seq 100`;do  
+       time curl -s 127.0.0.1 -o /dev/null -w "http_code:%{http_code}:%{time_total}s\n"
+    done
 
 
 
