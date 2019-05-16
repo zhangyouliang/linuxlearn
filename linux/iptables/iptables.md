@@ -2,11 +2,12 @@
 
 > [参考](https://www.cnblogs.com/bethal/p/5806525.html)
 
-iptables 有3个表
+iptables 有4个表
 
 - filter 是用来过滤数据包的,有三个链INPUT,OUTPUT,FORWARD
 - nat
 - managle 
+- raw
 
 参数
 ---
