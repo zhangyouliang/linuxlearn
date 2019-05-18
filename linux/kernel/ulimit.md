@@ -46,3 +46,30 @@ ulimit 用于限制 shell 启动进程所占用的资源，支持以下各种类
     max user processes              (-u) 98304       #当前用户同时打开的进程（包括线程）的最大个数为98304。
     virtual memory          (kbytes, -v) unlimited   #没有限制进程的最大地址空间。
     file locks                      (-x) unlimited   #所能锁住的文件的最大个数没有限制。
+
+
+操作
+---
+
+    # 第一个参数目前系统分配的数量,第二个参数最大分配数量
+    cat  /proc/sys/fs/file-nr
+    # Linux系统最多允许同时打开(即包含所有用户打开文件数总和)800037个文件，是Linux系统级硬限制，所有用户级的打开文件数限制都不应超过这个数值。该值是Linux系统在启动时根据系统硬件资源状况计算出来的最佳的最大同时打开文件数限制，如果没有特殊需要，不应该修改此限制，除非想为用户级打开文件数限制设置超过此限制的值。
+    cat /proc/sys/fs/file-max
+
+ulimit -n VS file-max
+----
+
+- ulimit -n控制进程级别能够打开的文件句柄的数量
+- max-file 表示系统级别的能够打开的文件句柄的数量
+
+`ulimit -n` 的设置在重启机器后会丢失，因此需要修改`limits.conf`的限制，limits.conf中有两个值`soft`和 `hard` ，soft代表只警告，hard代表真正的限制
+
+    cat /etc/security/limits.conf
+
+max-file 查看
+
+    sysctl -a |grep fs.file-max
+    # 设置
+    echo "fs.file-max = 2005920" >> /etc/sysctl.conf  
+    sysctl -p  
+    cat /proc/sys/fs/file-max 
