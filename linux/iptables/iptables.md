@@ -1,5 +1,5 @@
 > iptables 防火墙
-> iptables只是Linux防火墙的管理工具而已。真正实现防火墙功能的是netfilter，它是Linux内核中实现包过滤的内部结构。
+> iptables只是Linux防火墙的管理工具而已。真正实现防火墙功能的是 netfilter ，它是Linux内核中实现包过滤的内部结构。
 
 
 > [参考](https://www.cnblogs.com/bethal/p/5806525.html)
@@ -142,3 +142,4 @@
 ----
 - [iptables 四表五链](https://www.cnblogs.com/zhujingzhi/p/9706664.html)
 - [iptables详解（8）：iptables扩展模块之state扩展](http://www.zsythink.net/archives/1597)
+- [IBM:netfilter/iptables 简介](https://www.ibm.com/developerworks/cn/linux/network/s-netip/index.html)
