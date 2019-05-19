@@ -36,8 +36,16 @@ if ! which iostat &>/dev/null; then
     echo "-----------------------------------------------------------------------"
 fi
 
+if ! which conntrack &>/dev/null; then
+    echo "conntrack command not found, now the install."
+    sleep 1
+    os_check
+    $P_M install conntrack -y
+    echo "-----------------------------------------------------------------------"
+fi
+
 while true; do
-    select input in cpu_load disk_load disk_use disk_inode mem_use tcp_status cpu_top10 mem_top10 traffic quit; do
+    select input in cpu_load disk_load disk_use disk_inode mem_use tcp_status nat_tcp_status cpu_top10 mem_top10 traffic quit; do
     case $input in
     cpu_load)
         #CPU利用率与负载
@@ -143,6 +151,13 @@ while true; do
         #网络连接状态
         echo "---------------------------------------"
         COUNT=`netstat -antp |awk '{status[$6]++}END{for(i in status) print i,status[i]}'`
+        echo -e "TCP connection status:\n$COUNT"
+        echo "---------------------------------------"
+        ;;
+    nat_tcp_status)
+        # 网络连接状态
+        echo "---------------------------------------"
+        COUNT=`sudo conntrack -L -o extended | awk '/^.*tcp.*$/ {sum[$6]++} END {for(i in sum) print i, sum[i]}'`
         echo -e "TCP connection status:\n$COUNT"
         echo "---------------------------------------"
         ;;
