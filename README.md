@@ -20,3 +20,4 @@ introduce
 ----
 
 - [bash-study](https://github.com/zhangyouliang/bash-study)
+- [awesome-shell](https://github.com/alebcay/awesome-shell/blob/master/README_ZH-CN.md)
