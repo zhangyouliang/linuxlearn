@@ -40,7 +40,7 @@
 #### # Journal 维护
 
     # 查看当前日志占用磁盘的空间的总大小
-    journal --disk-usage
+    journalctl --disk-usage
     # 指定日志文件最大空间
     journalctl --vacuum-size=1G
     # 指定日志文件保存多久
