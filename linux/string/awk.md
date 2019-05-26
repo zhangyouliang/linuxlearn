@@ -14,7 +14,7 @@ awk命令格式和选项
 ---
 
     -F fs   fs指定输入分隔符，fs可以是字符串或正则表达式，(默认空格)如-F:
-    -v var=value   赋值一个用户定义变量，将外部变量传递给awk
+    -v var=value   赋值一个用户定义变量，将外部变量传递给 awk
     -f scripfile  从脚本文件中读取awk命令
     -m[fr] val   对val值设置内在限制，-mf选项限制分配给val的最大块数目；-mr选项限制记录的最大数目。这两个功能是Bell实验室版awk的扩展功能，在标准awk中不适用。
 
@@ -65,6 +65,7 @@ awk内置变量（预定义变量）
     $NF 显示当前字符串
     NR 显示当前行号
     
+    ### 可以使用 -v 引入需要修改的变量,来修改awk 运行行为
     [N] ARGC 命令行参数的数目。
     [G] ARGIND 命令行中当前文件的位置（从0开始算）。
     [N] ARGV 包含命令行参数的数组。
@@ -85,6 +86,11 @@ awk内置变量（预定义变量）
     [N] RSTART 由match函数所匹配的字符串的第一个位置。
     [N] RLENGTH 由match函数所匹配的字符串的长度。
     [N] SUBSEP 数组下标分隔符（默认值是34）。
+
+    使用例子(不需要 $ 符号):
+    awk -F: 'NF >= 7 {print NR,$0}' /etc/passwd
+
+
 
 awk 常用内建函数
 ----
@@ -134,7 +140,7 @@ getline也可以用来执行一个UNIX命令，并得到它的输出。下面例
 
 
 示例
---
+----
 
 打印每一行的第二和第三个字段：
 
@@ -175,12 +181,100 @@ getline也可以用来执行一个UNIX命令，并得到它的输出。下面例
 
 设置定界符 :使用-F来设置定界符（默认为空格）:
 
-    awk -F: '{print $NF}' /etc/passwd
+    awk -F: '{print NF}' /etc/passwd   //显示每行有多少字段
+    awk -F: '{print $NF}' /etc/passwd  //将每行第NF个字段的值打印出来
 
 读取命令输出: 使用getline，将外部shell命令的输出读入到变量cmdout中:
 
     echo | awk '{"grep root /etc/passwd" | getline cmdout; print cmdout }'
 
 
+awk 正则表达式
+
+    # data.csv
+    "first", "second", "last"
+    "fir,st", "second", "last"
+    "firtst one", "sec,ond field", "final,ly"
+    # 删除
+    awk -v FS ='“，”| ^“|”$''{print $ 2“###”$ 3“###”$ 4}'data.csv
 
 
+-v 表示将 FS 这个变量引入到 awk 里面使用
+
+- ", "	matches the area between the datafields
+- ^"	matches the area left of the first datafield
+- "$	matches the area right of the last data field
+
+
+表格输出
+
+    ## data2.csv
+    Marry   2143 78 84 77
+    Jack    2321 66 78 45
+    Tom     2122 48 77 71
+    Mike    2537 87 97 95
+    Bob     2415 40 57 62
+
+    ## 输出表格
+    awk 'BEGIN{math=0;eng=0;com=0;printf "Lineno.   Name    No.    Math   English   Computer    Total\n";printf "------------------------------------------------------------\n"}{math+=$3; eng+=$4; com+=$5;printf "%-8s %-7s %-7s %-7s %-9s %-10s %-7s \n",NR,$1,$2,$3,$4,$5,$3+$4+$5} END{printf "------------------------------------------------------------\n";printf "%-24s %-7s %-9s %-20s \n","Total:",math,eng,com;printf "%-24s %-7s %-9s %-20s \n","Avg:",math/NR,eng/NR,com/NR}' data2.csv
+
+统计`netstat -anp` 状态为 `LISTEN` 和 `CONNECT` 的连接数量分别是多少
+
+    netstat -anp|awk '$6~/LISTEN|CONNECTED/{sum[$6]++} END{for (i in sum) printf "%-10s %-6s %-3s \n", i," ",sum[i]}'
+
+
+统计 `/home` 目录下不同用户的普通文件的总数是多少？
+
+    ls -l|awk 'NR!=1 && !/^d/{sum[$3]++} END{for (i in sum) printf "%-6s %-5s %-3s \n",i," ",sum[i]}'   
+    mysql        199 
+    root           374 
+
+统计 `/home` 目录下不同用户的普通文件的大小总size是多少？
+
+    ls -l | awk 'NR!=1 && /^d/{sum[$3]+=$5} END{for(i in sum) printf "%-6s %-5s %.3s %-2s \n",i," ",sum[i]/1024/1024,"MB"}
+
+
+输出匹配的行的信息
+
+    awk '/ro{1,3}/{print}' /etc/passwd
+    或者
+    awk '/ro{1,3}/{print $0}' /etc/passwd
+
+awk逻辑运算符
+
+    # print 使用()来输出多个变量
+    awk 'BEGIN{a=1;b=2;print (a>2&&b>1,a=1||b>1)}'
+    0 1
+
+awk正则运算符
+
+
+    $ awk 'BEGIN{a="100testaa";if(a~/100/) {print "ok"}}'
+    ok
+    或者
+    $ echo|awk 'BEGIN{a="100testaaa"}a~/test/{print "ok"}'
+    ok
+
+第二个表达式,必须使用 echo 输出一个空白信息,让 awk 接收,否则 awk 将一直卡在那里
+
+awk 使用不同字符分割
+
+    # 使用`" "` 或者 `:` 作为分割符号
+    awk -F '[" ":]+' '{print $1"--"$2"--"$3}' data2.csv
+
+取 `data2.csv` 第2~4行的数据,输出行号,和内容
+
+    awk 'NR>=2 && NR<=4 {print NR" "$0}' data2.csv 
+
+输出 IP
+
+    ifconfig enp0s8 | awk -F '[" ":]+' 'NR==2{print $4}'
+
+
+**正则**
+![image](../images/1089507-20170126232437800-1355193233.jpg)
+
+
+参考
+====
+- [Linux三剑客之awk命令](https://www.cnblogs.com/ginvip/p/6352157.html)
