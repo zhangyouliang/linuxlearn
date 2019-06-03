@@ -143,3 +143,5 @@
 - [iptables 四表五链](https://www.cnblogs.com/zhujingzhi/p/9706664.html)
 - [iptables详解（8）：iptables扩展模块之state扩展](http://www.zsythink.net/archives/1597)
 - [IBM:netfilter/iptables 简介](https://www.ibm.com/developerworks/cn/linux/network/s-netip/index.html)
+- [linux系统中查看己设置iptables规则](https://blog.csdn.net/chengxuyuanyonghu/article/details/51897666)
+- [[译] 深入理解 iptables 和 netfilter 架构](https://arthurchiao.github.io/blog/deep-dive-into-iptables-and-netfilter-arch-zh/)
