@@ -22,7 +22,7 @@
     $ paste *.txt
     a 1 
     b 2
-    c  3
+    c 3
     $ paste *.txt -d ','
     a,1 
     b,2
