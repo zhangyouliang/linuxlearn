@@ -87,12 +87,37 @@ main表中路由记录都是普通的路由记录。而且，使用ip route配�
 
 
 
-    
-
-
 3.路由策略 rule
 
     > 一条路由规则主要有: 优先级,条件,路由表 (优先级数字越小,优先级越高)
+
+4.shell中获取本机ip地址
+
+方法一：
+
+    /sbin/ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"
+    or
+    /sbin/ifconfig|sed -n '/inet addr/s/^[^:]*:\([0-9.]\{7,15\}\) .*/\1/p'
+
+
+方法二： 
+
+    local_host="`hostname --fqdn`"
+
+    local_ip=`host $local_host 2>/dev/null | awk '{print $NF}'`
+
+方法三：
+
+    local_host="`hostname --fqdn`"
+    nslookup -sil $local_host 2>/dev/null | grep Address: | sed '1d' | sed 's/Address://g'
+
+方法四:
+
+    ip address  | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'
+
+方法五:
+
+    ifconfig enp0s8 | awk -F '[" ":]+' 'NR==2{print $4}'
 
 
 ###### 网络命名空间

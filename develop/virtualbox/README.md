@@ -15,3 +15,11 @@
     gpgkey=https://www.virtualbox.org/download/oracle_vbox.asc
     Install VirtualBox-5.2 rpm package:
     # yum install VirtualBox-5.2
+
+#### # ubuntu 安装
+
+    wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+    sudo apt-get update
+    atp install virtualbox-6.0
+    apt install atp
+    apt-get -f install
