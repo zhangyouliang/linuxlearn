@@ -33,6 +33,8 @@ ssh-keygen
      # 生成 id_rsa_test2 私钥,同时设置密码为 123456
      ssh-keygen -f ~/.ssh/id_rsa_test2 -P'123456'
      
+     # 创建 test key
+     ssh-keygen -f ~/.ssh/test -C "test key"
      
 ssh-keyscan
 ---
