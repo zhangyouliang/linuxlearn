@@ -13,8 +13,8 @@
 - -option：就是下面要说明的各个参数，参数后面有的会有操作数，需要注意
 - -print：find命令将匹配的文件输出到标准输出。
 - -exec ： -ok是-exec的一个选项，加上之后执行command时会询问用户
-- {} \：注意是反斜杠，大括号和反斜杠之间有一个空格
-- -;：注意！！！！分号必不可少！！！
+- {} \：注意是反斜杠，大括号和反斜杠之间有一个空格 (注意！！！！分号必不可少！！！)
+  - find . -type f -exec ls -l {} \;
 - -print0 将分隔符 \n 替换为 NULL(可以结合 xargs -0 使用,删除带有空格的文件)
 
 命令参数
@@ -163,3 +163,9 @@ exec 解释:
     
     # find 结合 xargs,grep 使用
     find . -type f -name "*.go" | xargs grep -n windows
+
+    # 搜索排除某个文件
+    # 搜索当前目录(深度: 1),排除文件:impl , go
+    find ./ -type f -maxdepth 1 \( ! -name "impl" ! -name "go"  \)
+    # 搜索文件并赋值到指定目录
+    find ./ -type f -maxdepth 1 | xargs -I {} mv {} ./bin   
