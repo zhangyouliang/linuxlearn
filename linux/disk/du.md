@@ -31,5 +31,7 @@
     du -h -d=1 ~
     
     # 显示总大小
-    ➜  ~ du -sh
+    du -sh
     670M
+    # 倒序排列
+    du -s * | sort -nr

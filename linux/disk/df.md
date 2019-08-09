@@ -36,3 +36,17 @@
     df -a
     # 使用 1000 为单位的可读性查看
     df -HT ~/nas
+
+    # 查看 containers 占用空间比较大的目录
+    du -s /var/lib/docker/containers/* | sort -rn | head -n1 | awk '{print $2}' | xargs du -h
+
+    # docker 查看磁盘空间
+    docker system df -v
+
+    # 空间清理
+    # 该指令默认会清除所有如下资源：
+    # 已停止的容器（container）
+    # 未被任何容器所使用的卷（volume）
+    # 未被任何容器所关联的网络（network）
+    # 所有悬空镜像（image）。
+    docker system prune
