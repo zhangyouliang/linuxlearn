@@ -3,10 +3,9 @@ docker 磁盘空间处理
 
 ````
 # 查看日志文件存储文件大小
-logs=$(find /var/lib/docker/containers/ -name *-json.log)  
-for log in $logs  
-do  
-    ls -lh $log   
+for log in `find /var/lib/docker/containers/ -name *-json.log`;
+do
+    du -h $log
 done
 
 
