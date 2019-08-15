@@ -11,15 +11,22 @@
 
 #### 变量替换
 
-* ${var} 变量本来的值
-* ${var:-word}	如果变量 var 为空或已被删除(unset)，那么返回 word，但不改变 var 的值。
-* ${var:=word}	如果变量 var 为空或已被删除(unset)，那么返回 word，并将 var 的值设置为 word。
-* ${var:?message}	如果变量 var 为空或已被删除(unset)，那么将消息 message 送到标准错误输出，可以用来检测变量 var 是否可以被正常赋值。
-若此替换出现在Shell脚本中，那么脚本将停止运行
-* ${var:+word}	如果变量 var 被定义，那么返回 word，但不改变 var 的值。
-* ${var=word} ：若 $var 没设定，则使用 word 作传回值，同时将 $var 赋值为 word 。
-* ${#value} 变量字符个数
+> https://www.cnblogs.com/gaochsh/p/6901809.html
 
+* ${var} 变量本来的值
+* ${var-DEFAULT}    如果变量没有声明,那么返回 DEFAULT ，但不改变 var 的值。
+* ${var:-DEFAULT}	如果变量 var 为空或已被删除(unset)，那么返回 DEFAULT ，但不改变 var 的值。
+* ${var=DEFAULT}    如果变量没有声明,那么返回 DEFAULT ，同时将 $var 赋值为 word 。
+* ${var:=DEFAULT}	如果变量 var 为空或已被删除(unset)，那么返回 DEFAULT ，同时将 $var 赋值为 word 。
+* ${var?ERR_MSG}    如果变量没有声明,那么返回 DEFAULT
+* ${var:?ERR_MSG}	如果变量 var 为空或已被删除(unset)，那么将消息 ERR_MSG 送到标准错误输出，可以用来检测变量 var 是否可以被正常赋值。
+若此替换出现在Shell脚本中，那么脚本将停止运行
+* ${var+OTHER}	如果变量 OTHER 被定义，那么返回 OTHER ，否则返回空字符串,但不改变 var 的值。
+* ${var:+OTHER}	如果变量 OTHER 被设置了，那么返回 OTHER ，否则返回空字符串,但不改变 var 的值。
+* ${#value} 变量字符个数
+* ${!varprefix*}	匹配之前所有以varprefix开头进行声明的变量
+* ${!varprefix@}	匹配之前所有以varprefix开头进行声明的变量
+> 加入了“*”  不是意思是： 当然, 如果变量var已经被设置的话, 那么其值就是$var.
 
 #### Shell中的${}、##和%%使用范例
 
