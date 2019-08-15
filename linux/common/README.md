@@ -46,6 +46,17 @@
 * ${file:0:5}：提取最左边的 5 个字节：/dir1
 * ${file:5:5}：提取第 5 个字节右边的连续5个字节：/dir2
 
+```
+# 例子
+str="abbc,def,ghi,abcjkl"
+echo ${str#a*,}
+# output: def,ghi,abcjkl
+echo ${str##a*,}
+# output: abcjkl
+
+```
+
+
 
 #### $() 与 ``
 
@@ -61,88 +72,153 @@
 
 - $() 并不是所有shell都支持, `` 几乎都支持,但是容易看错
 
+```
+echo `uname -a`
+echo $(uname -a)
+```
+
 **${ }**
 
 - `${ }`用于变量替换。一般情况下，`$var` 与 `${var}` 并没有什么不一样，但是用 `${ }` 会比较精确的界定变量名称的范围。
 
+```
+name=abc
+echo "name: ${name}"
+```
+
 **$[] $(())**
+> 主要数学运算
 
 `$[]`和 `$(())` 是一样的，都是进行数学运算的。支持 `+ - * / %（“加、减、乘、除、取模”）`。但是注意，bash只能作整数运算，**对于浮点数是当作字符串处理的**。
 
+```
+echo $[1*4]
+echo $[1+4]
+echo $[1-4]
+
+echo $((1+2))
+```
+> let,expr 也支持数学运算
+
+```
+let a=5+4
+echo $a
+```
 
 
 **()**
+> 主要处理数学,数组,子进程
 
 - 命令组。括号中的命令将会新开一个子shell顺序执行，所以括号中的变量不能够被脚本余下的部分使用。括号中多个命令之间用分号隔开，最后一个命令可以没有分号，各命令和括号之间不必有空格。
 - 命令替换。等同于`cmd`，shell扫描一遍命令行，发现了$(cmd)结构，便将$(cmd)中的cmd执行一次，得到其标准输出，再将此输出放到原来命令。有些shell不支持，如tcsh。
 - 用于初始化数组。如：array=(a b c d)
 
-    (name=1) 
-    echo $name # 输出为空
+```
+# 子进程内的变量,不能再外面使用
+(name=1)
+echo $name # 输出为空
+
+# () 创建 subshell
+for i in `seq 100`;do 
+(
+    curl -s https://ip.wlwz620.com -o /dev/null -w "http_code:%{http_code}:%{time_total}s\n";sleep 1; 
+)
+done
+# 验证(pid 不断变化)
+ps -ef | grep curl
+```
 
 **(())**
+> 主要针对数学处理
 
-(( ))不需要再将表达式里面的大小于符号转义，除了可以使用标准的数学运算符外，还增加了以下符号：
-
-* var++
-* var--
-* ++var
-* --var
-* !
-* ~
-* **
-* <<
-* >>
-* &
-* |
-* &&
-* ||
-
-
-**[]**
-
-- bash 内部命令,等同于 `test EXPRESSION`
-- **test 和 [] 只能使用 `=` 和 `!=` ,两者都是用于字符串比较的，不可用于整数比较，整数比较只能使用-eq，-gt这种形式**,[ ]中的逻辑与和逻辑或使用 `-a` 和 `-o` 表示
-
+* 数学运算: + - * / % (bash只能作整数运算，对于浮点数是当作字符串处理的)
+* 逻辑运算: && ||
+* 位移运算: <<,>>
+* 异或运算: ~
+* 位布尔: | & 
+* 其他: var++(后增),var--(后减),++var(先增),--var(先减) , ! 逻辑求反,** 幂运算
 
 **[[]]**
+> [] 的加强版
 
-- 使用`[[ ... ]]`条件判断结构，而不是`[ ... ]`，能够防止脚本中的许多逻辑错误。比如，`&&、||、<和>` 操作符能够正常存在于`[[ ]]`条件判断结构中，但是如果出现在`[ ]`结构中的话，会报错。比如可以直接使用`if [[ $a != 1 && $a != 2 ]]`, 如果不适用双括号, 则为`if [ $a -ne 1] && [ $a != 2 ]`或者`if [ $a -ne 1 -a $a != 2 ]`。
 - bash把双中括号中的表达式看作一个单独的元素，并返回一个退出状态码。
+- 数字比较: -eq, -ne, -gt, -ge, -lt, -le
+- 字符串比较: =, != , -z 字符串, -n 字符串,>,<
 
-        # 前后有空格
-        $ if [[ 1!=2 && 1=2  ]];then echo 1; fi
-        1
-        # 正确
-        $ if [[ 1 != 2 && 1 = 1  ]];then echo 1; fi
+使用`[[ ... ]]`条件判断结构，而不是`[ ... ]`，能够防止脚本中的许多逻辑错误。比如，`&&、||、<和>` 操作符能够正常存在于`[[ ]]`条件判断结构中，但是如果出现在`[ ]`结构中的话，会报错。比如可以直接使用`if [[ $a != 1 && $a != 2 ]]`, 如果不适用双括号, 则为`if [ $a -ne 1] && [ $a != 2 ]`或者`if [ $a -ne 1 -a $a != 2 ]`。
 
-#### (()) 的支持问题
+````
+###  数字比较
+if [[ 11 -gt 2 ]];then echo true;else echo false;fi
+# output: true
+# !!! 字符串 ascii 比较
+if [[ 11 < 2 ]];then echo true;else echo false;fi
+# output: true
 
-        # Bash (or others) compound command
-        if ((MATH)); then
-        ...
-        
-        # portable equivalent command
-        if [ "$((MATH))" -ne 0 ]; then
-        ...
-        fi
+### 字符串比较
+if [[ '11' == 11 ]];then echo true;else echo false;fi
+# output: true
+if [[ '11' = 11 ]];then echo true;else echo false;fi 
+# output: true
+if [[ '11' != 11 ]];then echo true;else echo false;fi
+# output: false
 
-`(())` POSIX 没有这个命令,可以使用 `$(())` ,利用退出码是否为0的方式来替代
-        
+### && || 
+if [[ 1 -gt 2 && 2 -gt 3  ]];then echo true;else echo false;fi
+# output: false
+➜  ~ if [[ 1 -lt 2 && 2 -gt 3  ]];then echo true;else echo false;fi
+# output: false
+➜  ~ if [[ 1 -lt 2 && 2 -lt 3  ]];then echo true;else echo false;fi
+# output: true
+
+# 前后有空格
+$ if [[ 1!=2 && 1=2  ]];then echo 1; fi
+1
+# 正确
+$ if [[ 1 != 2 && 1 = 1  ]];then echo 1; fi
+````
+####  test 或者 []
+> 只有两个结果: true,false(0,1)
+
+* 数字测试: -eq, -ne, -gt, -ge, -lt, -le
+* 字符串测试: =, != , -z 字符串, -n 字符串
+* 文件测试: -e,-r,-w,-x,-s,-d,-f,-c,-b
+
+```
+num1=100
+num2=200
+if test ${num1} -eq ${num2}
+then
+    echo '两个数相等！'
+else
+    echo '两个数不相等！'
+fi
+
+
+# [] 
+# 等价于 test
+# 算数运算
+a=5
+b=6
+result=$[a + b] # 注意等号两边不能有空格 
+# result=`expr $a + $b ` 等同于
+echo "result 为： $result"
+
+```
 
 #### 算数运算符
-
-    # if test
-    var1=1
-    var2=2
-    if test $var1 == 1 -a $var2 == 2; then
-        echo "equal"
-    fi
-    # if []
-    if [ $var1 == 1 -a $var2 == 2 ]; then
-        echo "equal"
-    fi
-
+```
+# if test
+var1=1
+var2=2
+if test $var1 == 1 -a $var2 == 2; then
+    echo "equal"
+fi
+# if []
+if [ $var1 == 1 -a $var2 == 2 ]; then
+    echo "equal"
+fi
+```
 #### 字符串比较
 
 * =      等于,如:if [ "$a" = "$b" ]
@@ -623,6 +699,12 @@ ftp 例子:
 
 - sed 替换命令
 
+
+
+
+
+
+
 ##### shell 进行算数运算
 
 - expr  只能整数
@@ -651,6 +733,33 @@ awk 'BEGIN{printf "%.2f\n",10.1/2}'
 
 ```
 
+##### expr
+```
+expr --help
+    match STRING REGEXP        same as STRING : REGEXP
+    substr STRING POS LENGTH   substring of STRING, POS counted from 1
+    index STRING CHARS         index in STRING where any CHARS is found, or 0
+    length STRING              length of STRING
+```
+
+例子:
+```
+### 字符串截取
+str=abc1212abc 
+echo ${str:0:4} 
+# 或者
+expr ${str:0:4} 
+expr index "$str" "abc"
+# output: 1
+expr length "$str"   
+# output: 10
+expr substr $str 1 4 
+# output: abc1
+expr match $str '\([a-z]*\)'
+# output: abc
+```
+
+
 ##### 脚本专有变量
 
 * BASH_SOURCE[0] 当前脚本文件
@@ -659,4 +768,4 @@ awk 'BEGIN{printf "%.2f\n",10.1/2}'
 ====
 - [wiki-hackers](https://wiki.bash-hackers.org/start)
 - [awesome-shell](https://github.com/alebcay/awesome-shell/blob/master/README_ZH-CN.md)
-
+- [Bash Reference Manual](http://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html)
