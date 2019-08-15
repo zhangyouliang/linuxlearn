@@ -56,7 +56,8 @@ echo ${str##a*,}
 
 ```
 
-
+###########
+参考地址: [Bash Reference Manual](http://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#What-is-Bash_003f)
 
 #### $() 与 ``
 
@@ -88,6 +89,7 @@ echo "name: ${name}"
 
 **$[] $(())**
 > 主要数学运算
+> If the value of the expression is non-zero, the return status is 0; otherwise the return status is 1
 
 `$[]`和 `$(())` 是一样的，都是进行数学运算的。支持 `+ - * / %（“加、减、乘、除、取模”）`。但是注意，bash只能作整数运算，**对于浮点数是当作字符串处理的**。
 
@@ -176,6 +178,10 @@ $ if [[ 1!=2 && 1=2  ]];then echo 1; fi
 1
 # 正确
 $ if [[ 1 != 2 && 1 = 1  ]];then echo 1; fi
+
+# 逻辑真 (regex matching)  
+if [[ "a.txt" =~ .*\.txt ]];then echo true; else echo false ; fi
+# output:true
 ````
 ####  test 或者 []
 > 只有两个结果: true,false(0,1)
