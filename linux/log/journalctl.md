@@ -42,6 +42,13 @@
     # 查看当前日志占用磁盘的空间的总大小
     journalctl --disk-usage
     # 指定日志文件最大空间
-    journalctl --vacuum-size=1G
+    journalctl --vacuum-size=500M
     # 指定日志文件保存多久
-    journalctl --vacuum-time=1years
+    journalctl --vacuum-time=2d
+    # 如果要手工删除日志文件，则在删除前需要先轮转一次journal日志
+    systemctl kill --kill-who=main --signal=SIGUSR2 systemd-journald.service
+    # 重启
+    systemctl restart systemd-journald.service
+    # 检查journal是否运行正常以及日志文件是否完整无损坏
+    journalctl --verify
+    

@@ -14,7 +14,7 @@ ubuntu 常用安装包[[官方包搜索地址]](https://packages.ubuntu.com/)
     * acpidbg
     * turbostat
     * .....
-
+* ncdu: 磁盘占用分析工具 (平时使用: du -ah --max-depth=1 /)
 
 ubuntu 更换阿里数据源
 ------
