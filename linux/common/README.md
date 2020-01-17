@@ -26,7 +26,8 @@
 * ${#value} 变量字符个数
 * ${!varprefix*}	匹配之前所有以varprefix开头进行声明的变量
 * ${!varprefix@}	匹配之前所有以varprefix开头进行声明的变量
-> 加入了“*”  不是意思是： 当然, 如果变量var已经被设置的话, 那么其值就是$var.
+
+![image](./img/20150620201642326.png)
 
 #### Shell中的${}、##和%%使用范例
 
@@ -53,7 +54,11 @@ echo ${str#a*,}
 # output: def,ghi,abcjkl
 echo ${str##a*,}
 # output: abcjkl
-
+str="dir1/dir2/dir3/my.file.txt"
+# output: dir1/dir2/dir3
+echo ${str%/*}
+# output: dir1
+echo ${str%%/*}
 ```
 
 ###########

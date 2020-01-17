@@ -32,6 +32,10 @@ function kubectl_retry(){
     done
 }
 # kubectl_retry $@
+# output: 
+# failure
+# (kubectl failed, will retry 2 times)
+# success
 
 if ! command -v zgrep &> /dev/null; then
     zgrep(){
