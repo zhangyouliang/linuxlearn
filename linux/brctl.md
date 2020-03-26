@@ -6,37 +6,9 @@
 # yum install bridge-utils -y
 ```
 
-```
-使用brctl命令创建网桥br1
-```
-# brctl addbr br1
-```
-
-删除网桥br1
-```
-# brctl delbr br1
-```
-
-将eth0端口加入网桥br1
-```
-# brctl addif br1 eth0
-```
-
-删除eth0端口加入网桥br1
-```
-# brctl delif br1 eth0
-```
-查询网桥信息
-
-```
-# brctl show
-# brctl show br1
-```
-
-
-
 命令参数
-
+---
+```
 Usage: brctl [commands]
 commands:
         addbr           <bridge>                add bridge
@@ -68,3 +40,34 @@ commands:
         showstp         <bridge>                show bridge stp info
         B
         stp             <bridge> {on|off}       turn stp on/off
+```
+
+案例
+---
+```
+# 使用brctl命令创建网桥br1
+brctl addbr br1
+# 删除网桥br1
+brctl delbr br1
+# 将eth0端口加入网桥br1
+brctl addif br1 eth0
+# 删除eth0端口加入网桥br1
+brctl delif br1 eth0
+# 查询网桥信息
+brctl show
+brctl show br1
+```
+
+
+参考
+---
+
+
+
+
+
+
+
+
+
+

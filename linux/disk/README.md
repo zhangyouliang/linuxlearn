@@ -11,6 +11,8 @@
 分区扩容
 ===
 * [参考:阿里云文档](https://help.aliyun.com/document_detail/111738.html?spm=a2c4g.11186623.6.806.7aba7f67yDLZqL)
+
+
 ````
 # 根据操作系统安装growpart或者xfsprogs扩容格式化工具
 apt install cloud-guest-utils

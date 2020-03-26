@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+###
+# Markdown 模板生成工具
+# ./make.sh xxx.md
+###
 if [[ $# -lt 1 ]];then
     echo "Usage: ./$0 <file name>"
     exit 1
