@@ -281,7 +281,7 @@ $ echo 1 > /proc/sys/net/ipv4/tcp_syncookies
 # 增大 tcp_max_syn_backlog
 echo 1024 > /proc/sys/net/ipv4/tcp_max_syn_backlog
 # 增大 somaxconn
-echo 1024 > /proc/sys/net/ipv4/somaxconn
+echo 1024 > /proc/sys/net/core/somaxconn
 ````
 
 增大 backlog 的方式，每个 Web 服务都不同，比如 Nginx 增大 backlog 的方法如下：
