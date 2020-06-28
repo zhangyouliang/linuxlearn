@@ -56,7 +56,7 @@ netstat属于net-tools工具集，ss属于ipoute工具集。替换方案如下�
 用途             net-tool(被淘汰)    iproute2
 地址和链路配置     ifconfig          ip addr, ip linke
 路由表            route              ip route
-邻居              arp               ip neight
+邻居              arp               ip neigh
 VLAN             vconfig            ip link
 隧道              iptunnel           ip tunnel
 组播              ipmaddr            ip maddr
