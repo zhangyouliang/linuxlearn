@@ -1,5 +1,7 @@
 mac 局域网之间磁盘共享
 ====
+
+服务端:
 ```
 # 例如 我的局域网 ip 为 192.168.1.122 , workspace 为 共享目录
 echo '/Users/root/workspace -alldirs -ro -network 192.168.1.0 -mask 255.255.255.0' >> /etc/exports
@@ -12,7 +14,7 @@ sudo nfsd update
 showmount -e
 ```
 
-在需要挂载的电脑上面执行
+客户端: (在需要挂载的电脑上面执行)
 
 ```
 
