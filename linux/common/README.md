@@ -128,7 +128,7 @@ echo $name # 输出为空
 # () 创建 subshell
 for i in `seq 100`;do 
 (
-    curl -s https://ip.wlwz620.com -o /dev/null -w "http_code:%{http_code}:%{time_total}s\n";sleep 1; 
+    curl -s http://ip.wlwz620.com -o /dev/null -w "http_code:%{http_code}:%{time_total}s\n";sleep 1; 
 )
 done
 # 验证(pid 不断变化)
@@ -313,7 +313,9 @@ fi
 
 #### 格式话输出
 
+    
     printf "%d %s \n" 1 "abc"
+    # 9000 转换为 16进制(32位,不足的前面补0)
     printf "%032x\n" 9000
 
 #### for

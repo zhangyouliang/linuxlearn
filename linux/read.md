@@ -3,7 +3,7 @@
 选项
 ---
 
-输入重定向命令`<file`会打开文件并执行读操作，并且会将读取的内容以标准输入的形式提供给read命令。
+输入重定向命令`< file`会打开文件并执行读操作，并且会将读取的内容以标准输入的形式提供给read命令。
 
 
     -r 表示read将读取原生内容，所有字符都不会被转义，例如反斜线不会用于转义（只是反斜线）。
@@ -41,7 +41,7 @@ while IFS= read -r line; do
 done < file
 
 # 或者
-cat file | while IFS= read -r l ine; do
+cat file | while IFS= read -r line; do
     # do something with $line
 done
 
