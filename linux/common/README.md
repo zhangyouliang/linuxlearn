@@ -406,38 +406,39 @@ fi
 
 set命令的上面这四个参数，一般都放在一起使用。
 
+```
+# 写法一
+set -euxo pipefail
 
-    # 写法一
-    set -euxo pipefail
-
-    # 写法二
-    set -eux
-    set -o pipefail
+# 写法二
+set -eux
+set -o pipefail
+```
 
 这两种写法建议放在所有 Bash 脚本的头部。
 
 另一种办法是在执行 Bash 脚本的时候，从命令行传入这些参数。
-
-    $ bash -euxo pipefail script.sh
-
+```
+$ bash -euxo pipefail script.sh
+```
 #### eval
 
 > $($n): eval  把$n 当作一个shell命令。 
+```
+$ set -- one two three  # 设置 $1 $2 $3
+$ echo $1
+one
+$ n=1
+$echo ${$n} ## 第一次尝试用大括号
+bash: ${$n}: bad substitution
+$ echo $($n) ## 第二次尝试用小括号
+bash: 1: command not found
 
-    $ set -- one two three  # 设置 $1 $2 $3
-    $ echo $1
-    one
-    $ n=1
-    $echo ${$n} ## 第一次尝试用大括号
-    bash: ${$n}: bad substitution
-    $ echo $($n) ## 第二次尝试用小括号
-    bash: 1: command not found
-
-    $ echo ${!n} ## 第三次尝试用!解析
-    one
-    $ eval echo \${$n}
-    one
-
+$ echo ${!n} ## 第三次尝试用!解析
+one
+$ eval echo \${$n}
+one
+```
 
 
 
@@ -452,56 +453,57 @@ set命令的上面这四个参数，一般都放在一起使用。
 
 
 1. function 返回状态码
-
-    function get-num-nodes(){
-        return 0
-    }
-    # get-num-nodes 失败时候输出 failed
-    if ! get-num-nodes ;then
-        echo 'failed'
-    fi
-
+```
+function get-num-nodes(){
+    return 0
+}
+# get-num-nodes 失败时候输出 failed
+if ! get-num-nodes ;then
+    echo 'failed'
+fi
+```
 2. 全局变量,获取返回值
-
-    num=10
-    add(){
-        ((num++))
-    }
-    add
-    echo $num
-
+```
+num=10
+add(){
+    ((num++))
+}
+add
+echo $num
+```
 3. 标准输入输出获取返回值
-
-    function get-num-nodes(){
-        echo 'the function echo value' >&1
-    }
-    EXPECTED_NUM_NODES=$(get-num-nodes)
-    echo $EXPECTED_NUM_NODES
-
+```
+function get-num-nodes(){
+    echo 'the function echo value' >&1
+}
+EXPECTED_NUM_NODES=$(get-num-nodes)
+echo $EXPECTED_NUM_NODES
+```
 4. 通过 $? 获取返回值
+```
+function get-num-nodes(){
+    return 100
+}
 
-    function get-num-nodes(){
-        return 100
-    }
-
-    get-num-nodes
-    EXPECTED_NUM_NODES=$?
-    echo $EXPECTED_NUM_NODES
-
+get-num-nodes
+EXPECTED_NUM_NODES=$?
+echo $EXPECTED_NUM_NODES
+```
 
 #### 背景颜色
+```
+color_norm="\033[0m"
+color_black="\033[30m"
+color_red="\033[31m"
+color_green="\033[32m"
+color_yellow="\033[33m"
+color_blue="\033[34m"
+color_purple="\033[35m"
+color_ksyblue="\033[36m"
+color_white="\033[37m"
 
-    color_norm="\033[0m"
-    color_black="\033[30m"
-    color_red="\033[31m"
-    color_green="\033[32m"
-    color_yellow="\033[33m"
-    color_blue="\033[34m"
-    color_purple="\033[35m"
-    color_ksyblue="\033[36m"
-    color_white="\033[37m"
-
-    echo -e "${color_red} Failed to get nodes.${color_norm}"
+echo -e "${color_red} Failed to get nodes.${color_norm}"
+```
 
 #### declare
 
@@ -535,21 +537,21 @@ set命令的上面这四个参数，一般都放在一起使用。
 * -x 将声明一个变量作为脚本的环境变量而被导出
         declare -x var3=373
 * -A 字典类型声明
-
-    declare -A MasterDict
-    MasterDict=(['k8s-m1']=10.0.6.166 ['k8s-m2']=10.0.6.167 ['k8s-m3']=10.0.6.168)
-    for NODE in "${!MasterDict[@]}"; do
-        echo "--- $NODE ${MasterDict[$NODE]} ---"
-    done
-    
+```
+declare -A MasterDict
+MasterDict=(['k8s-m1']=10.0.6.166 ['k8s-m2']=10.0.6.167 ['k8s-m3']=10.0.6.168)
+for NODE in "${!MasterDict[@]}"; do
+    echo "--- $NODE ${MasterDict[$NODE]} ---"
+done
+``` 
     
 例子
-        
-    func1(){
-        echo This is a function
-    }
-    decleae -f # 列出上面的函数
-    
+``` 
+func1(){
+    echo This is a function
+}
+decleae -f # 列出上面的函数
+``` 
         
 
 #### 压缩相关命令
@@ -574,53 +576,54 @@ set命令的上面这四个参数，一般都放在一起使用。
         .tar.bz
 
 #### 信号 和 Traps
+```
+# test trap command
+trap "echo 'Sorry! I have trapped Ctrl-C';exit" SIGINT
 
-    # test trap command
-    trap "echo 'Sorry! I have trapped Ctrl-C';exit" SIGINT
+echo This is a test script
 
-    echo This is a test script
+count=1
+while [ $count -le 10 ]
+do
+echo "Loop $count"
+sleep 1
+count=$[ $count + 1 ]
+done
 
-    count=1
-    while [ $count -le 10 ]
-    do
-    echo "Loop $count"
-    sleep 1
-    count=$[ $count + 1 ]
-    done
-
-    echo The end.
+echo The end.
+```
 #### 数据类型判断
+```
+## 类型判断
+function check(){
+    local a="$1"
+    printf "%d" "$a" &>/dev/null && echo "integer" && return
+    printf "%d" "$(echo $a|sed 's/^[+-]\?0\+//')" &>/dev/null && echo "integer" && return
+    printf "%f" "$a" &>/dev/null && echo "number" && return
+    [ ${#a} -eq 1 ] && echo "char" && return
+    echo "string"
+}
 
-    ## 类型判断
-    function check(){
-        local a="$1"
-        printf "%d" "$a" &>/dev/null && echo "integer" && return
-        printf "%d" "$(echo $a|sed 's/^[+-]\?0\+//')" &>/dev/null && echo "integer" && return
-        printf "%f" "$a" &>/dev/null && echo "number" && return
-        [ ${#a} -eq 1 ] && echo "char" && return
-        echo "string"
-    }
-
-    # usage
-    echo $(check 'name')
-
+# usage
+echo $(check 'name')
+```
 ##### awk  结合 for 循环
 
-
-    ips=$(cat ~/.ssh/config | grep 'HostName' | awk '{print $2}')
-    for i in `echo $ips`;do
-            ssh-copy-id -i ~/.ssh/id_rsa.pub $i
-    done
-
+```
+ips=$(cat ~/.ssh/config | grep 'HostName' | awk '{print $2}')
+for i in `echo $ips`;do
+        ssh-copy-id -i ~/.ssh/id_rsa.pub $i
+done
+```
 ##### Check for a Command in PATH
-
-    # which,hash,command
-    # if which ls >/dev/null 2>&1; then
-    # if command -v ls >/dev/null 2>&1; then
-    if hash ls >/dev/null 2>&1; then
-        echo "ls is available"
-    fi
-
+```
+# which,hash,command
+# if which ls >/dev/null 2>&1; then
+# if command -v ls >/dev/null 2>&1; then
+if hash ls >/dev/null 2>&1; then
+    echo "ls is available"
+fi
+```
 
 调试
 =====
@@ -645,44 +648,45 @@ set命令的上面这四个参数，一般都放在一起使用。
 
 调试脚本例子:
 
-        
-    debugme() {
-        [[ $script_debug = 1 ]] && "$@" || :
-        # be sure to append || : or || true here or use return 0, since the return code
-        # of this function should always be 0 to not influence anything else with an unwanted
-        # "false" return code (for example the script's exit code if this function is used
-        # as the very last command in the script)
-    }
-    script_debug=1
-    # to turn it off, set script_debug=0
-    
-    debugme logger "Sorting the database"
-    database_sort
-    debugme logger "Finished sorting the database, exit code $?"
-        
+```    
+debugme() {
+    [[ $script_debug = 1 ]] && "$@" || :
+    # be sure to append || : or || true here or use return 0, since the return code
+    # of this function should always be 0 to not influence anything else with an unwanted
+    # "false" return code (for example the script's exit code if this function is used
+    # as the very last command in the script)
+}
+script_debug=1
+# to turn it off, set script_debug=0
+
+debugme logger "Sorting the database"
+database_sort
+debugme logger "Finished sorting the database, exit code $?"
+```    
 
 当然，这可以用于在调试期间执行除echo之外的其他操作：
 
-        
-    debugme set -x
-    ＃...一些代码......
-    debugme set + x
-        
+```   
+debugme set -x
+＃...一些代码......
+debugme set + x
+```
+
 [比较完善的例子](../tools/debug.sh)
 
 
 ftp 例子:
-
-    if [[ $DRY_RUN = yes ]]; then
-      sed 's/^/DRY_RUN FTP: /'
-    else
-      ftp user@host
-    fi <<FTP
-    cd /data
-    get current.log
-    dele current.log
-    FTP
-
+```
+if [[ $DRY_RUN = yes ]]; then
+  sed 's/^/DRY_RUN FTP: /'
+else
+  ftp user@host
+fi <<FTP
+cd /data
+get current.log
+dele current.log
+FTP
+```
 ##### 正则表达式
 
 > [参考: hell常用正则表达式](https://www.cnblogs.com/linuxws/p/6942574.html)
