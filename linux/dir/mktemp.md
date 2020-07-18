@@ -6,7 +6,7 @@
 ----
 
     -d  create a directory, not a file
-    -u  do not create anything; merely print a name (unsafe)
+    -u  do not create anything; merely print a name (unsafe) 暂存文件会在mktemp结束前先行删除。
     -q suppress diagnostics about file/dir-creation failure (即使出错也不会提示)
     -t interpret  TEMPLATE  as  a  single  file  name  component, relative to a directory:
               $TMPDIR, if set; else the directory specified via -p; else /tmp [deprecated]
@@ -16,6 +16,7 @@
     --suffix=SUFF
               append SUFF to TEMPLATE; SUFF must not contain a slash.  This option is implied  if
               TEMPLATE does not end in X
+              
 
 
 
