@@ -12,7 +12,9 @@
 - -path：就是文件的路径啦
 - -option：就是下面要说明的各个参数，参数后面有的会有操作数，需要注意
 - -print：find命令将匹配的文件输出到标准输出。
-- -exec ： -ok是-exec的一个选项，加上之后执行command时会询问用户
+- -exec ： -ok 是-exec 的一个选项，加上之后执行command时会询问用户
+   -  find . -type f -mtime -1 -exec rm {} \; # 不询问
+   -  find . -name "*.log" -type f  -mtime -1 -ok rm {} \; # 询问
 - {} \：注意是反斜杠，大括号和反斜杠之间有一个空格 (注意！！！！分号必不可少！！！)
   - find . -type f -exec ls -l {} \;
 - -print0 将分隔符 \n 替换为 NULL(可以结合 xargs -0 使用,删除带有空格的文件)
@@ -53,8 +55,9 @@
 
 
     -name 按照文件名查询文件
+    -empty 查询空文件夹
     -perm 按照文件权限来查找文件
-    -uer 按照文件属主来查询文件
+    -user 按照文件属主来查询文件
     -group 按照文件所属的组来查找文件
     -nogroup 查看无效分组的文件
     -nouser 查看无效用户的文件
@@ -62,7 +65,7 @@
     -prune 忽律某个目录
     
     
-    -mtime -n +n  按照文件的更改时间来查找文件， - n表示文件更改时间距现在n天以内，+ n表示文件更改时间距现在n天以前。find命令还有-atime和-ctime 选项，但它们都和-m time选项。
+    -mtime [-n/+n]  按照文件的更改时间来查找文件， -n 表示文件更改时间距现在n天以内，+n 表示文件更改时间距现在n天以前。find命令还有-atime和-ctime 选项，但它们都和-m time选项。
     atime : 访问时间(access time)
     mtime : 修改时间(modify time)
     ctime: 状态修改时间(change time)
@@ -75,6 +78,12 @@
     p - 管道文件。
     l - 符号链接文件。
     f - 普通文件。
+    
+    -size 
+    # 查找出大于10000000字节的文件(c:字节，w:双字，k:KB，M:MB，G:GB)
+    find / -size +10000c 
+    # 查找出小于1000KB的文件
+    find / -size -1000k 　　
 
 
 ### # 查看文件属性
@@ -127,13 +136,18 @@
 
     find . -atime +1
 
-    # 搜索当前目录的以 .log 结尾,一天内,权限问 600 ,大小大于 1 b 的普通文件,并且按照普通方式输出
+    # 搜索当前目录的以 .log 结尾,一天内,权限 600 ,大小大于 1 b 的普通文件,并且按照普通方式输出
     find . -type f -name '*.log' -atime -1 -perm 600 -size +1c -print
     
     # -exec 执行命令
+    # 管道传递给 cat
     find . -type f -name '*.log' -exec cat {} \;
     
+    # 删除 .log 文件之前进行询问
+    find . -name "[a-zA-Z].log"  -type f -mtime -1 -ok rm {} \;
     
+    # 直接删除不询问
+    find . -name "[a-zA-Z].log"  -type f -mtime -1 -exec rm {} \;
     
 
 
@@ -155,17 +169,20 @@ exec 解释:
 
     # 搜索 .md 文件当中,包含 'golang.org/x' 的全部文件(缺点:不显示文件名)
     find . -type f -name "*.md" | xargs cat | grep "golang.org/x"
-
-    # 搜索文件内容,并且显示文件名称
+    
+    # 替换全部 *.log 里面的字符串
+    find . -type f -name "*.log" -exec sed -i "s/2021/2020/g" {} \;
+    
+    # 搜索文件内容,并且显示文件名称(高亮显示)
     # -r 递归
     # -n 显示行号
     grep "golang.org/x" -rn .  --include='*.go'
     
-    # find 结合 xargs,grep 使用
+    # find 结合 xargs,grep 使用(不高亮显示)
     find . -type f -name "*.go" | xargs grep -n windows
 
     # 搜索排除某个文件
-    # 搜索当前目录(深度: 1),排除文件:impl , go
-    find ./ -type f -maxdepth 1 \( ! -name "impl" ! -name "go"  \)
+    # 搜索当前目录(深度: 1),排除文件:*.log , *.go
+    find . -type f -maxdepth 1 \( ! -name "*.log" ! -name "*.go"  \)
     # 搜索文件并赋值到指定目录
-    find ./ -type f -maxdepth 1 | xargs -I {} mv {} ./bin   
+    find . -type f -maxdepth 1 | xargs -I {} mv {} ./bin   
