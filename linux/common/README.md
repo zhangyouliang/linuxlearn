@@ -87,7 +87,7 @@ echo $(uname -a)
 
 - `${ }`用于变量替换。一般情况下，`$var` 与 `${var}` 并没有什么不一样，但是用 `${ }` 会比较精确的界定变量名称的范围。
 
-```
+```shell script
 name=abc
 echo "name: ${name}"
 ```
@@ -98,7 +98,7 @@ echo "name: ${name}"
 
 `$[]`和 `$(())` 是一样的，都是进行数学运算的。支持 `+ - * / %（“加、减、乘、除、取模”）`。但是注意，bash只能作整数运算，**对于浮点数是当作字符串处理的**。
 
-```
+```shell script
 echo $[1*4]
 echo $[1+4]
 echo $[1-4]
@@ -107,7 +107,7 @@ echo $((1+2))
 ```
 > let,expr 也支持数学运算
 
-```
+```shell script
 let a=5+4
 echo $a
 ```
@@ -120,7 +120,7 @@ echo $a
 - 命令替换。等同于`cmd`，shell扫描一遍命令行，发现了$(cmd)结构，便将$(cmd)中的cmd执行一次，得到其标准输出，再将此输出放到原来命令。有些shell不支持，如tcsh。
 - 用于初始化数组。如：array=(a b c d)
 
-```
+```shell script
 # 子进程内的变量,不能再外面使用
 (name=1)
 echo $name # 输出为空
@@ -144,6 +144,22 @@ ps -ef | grep curl
 * 异或运算: ~
 * 位布尔: | & 
 * 其他: var++(后增),var--(后减),++var(先增),--var(先减) , ! 逻辑求反,** 幂运算
+* ==
+```shell script
+# 整数比较
+if (( 1 == 2 )); then
+  echo true
+else
+  echo false 
+fi
+# 字符串比较
+if (( "hello" == "world" )); then
+  echo true
+else
+  echo false 
+fi
+```
+
 
 **[[]]**
 > [] 的加强版
@@ -152,9 +168,10 @@ ps -ef | grep curl
 - 数字比较: -eq, -ne, -gt, -ge, -lt, -le
 - 字符串比较: =, != , -z 字符串, -n 字符串,>,<
 
-使用`[[ ... ]]`条件判断结构，而不是`[ ... ]`，能够防止脚本中的许多逻辑错误。比如，`&&、||、<和>` 操作符能够正常存在于`[[ ]]`条件判断结构中，但是如果出现在`[ ]`结构中的话，会报错。比如可以直接使用`if [[ $a != 1 && $a != 2 ]]`, 如果不适用双括号, 则为`if [ $a -ne 1] && [ $a != 2 ]`或者`if [ $a -ne 1 -a $a != 2 ]`。
+使用`[[ ... ]]`条件判断结构，而不是`[ ... ]`，能够防止脚本中的许多逻辑错误。比如，`&&、||、<和>` 操作符能够正常存在于`[[ ]]`条件判断结构中，但是如果出现在`[ ]`结构中的话，会报错。
+比如可以直接使用`if [[ $a != 1 && $a != 2 ]]`, 如果不使用双括号, 则为`if [ $a -ne 1] && [ $a != 2 ]`或者`if [ $a -ne 1 -a $a != 2 ]`。
 
-````
+````shell script
 ###  数字比较
 if [[ 11 -gt 2 ]];then echo true;else echo false;fi
 # output: true
@@ -173,16 +190,16 @@ if [[ '11' != 11 ]];then echo true;else echo false;fi
 ### && || 
 if [[ 1 -gt 2 && 2 -gt 3  ]];then echo true;else echo false;fi
 # output: false
-➜  ~ if [[ 1 -lt 2 && 2 -gt 3  ]];then echo true;else echo false;fi
+if [[ 1 -lt 2 && 2 -gt 3  ]];then echo true;else echo false;fi
 # output: false
-➜  ~ if [[ 1 -lt 2 && 2 -lt 3  ]];then echo true;else echo false;fi
+if [[ 1 -lt 2 && 2 -lt 3  ]];then echo true;else echo false;fi
 # output: true
 
 # 前后有空格
-$ if [[ 1!=2 && 1=2  ]];then echo 1; fi
+if [[ 1!=2 && 1=2  ]];then echo 1; fi
 1
 # 正确
-$ if [[ 1 != 2 && 1 = 1  ]];then echo 1; fi
+if [[ 1 != 2 && 1 = 1  ]];then echo 1; fi
 
 # 逻辑真 (regex matching)  
 if [[ "a.txt" =~ .*\.txt ]];then echo true; else echo false ; fi
@@ -195,7 +212,7 @@ if [[ "a.txt" =~ .*\.txt ]];then echo true; else echo false ; fi
 * 字符串测试: =, != , -z 字符串, -n 字符串
 * 文件测试: -e,-r,-w,-x,-s,-d,-f,-c,-b
 
-```
+```shell script
 num1=100
 num2=200
 if test ${num1} -eq ${num2}
@@ -218,7 +235,7 @@ echo "result 为： $result"
 ```
 
 #### 算数运算符
-```
+```shell script
 # if test
 var1=1
 var2=2
@@ -234,7 +251,7 @@ fi
 
 * =      等于,如:if [ "$a" = "$b" ]
 * ==     等于,如:if [ "$a" == "$b" ],与=等价
-== 的功能在 [] 和 [[]] 的行为是不同的,例如: [[ $a == z* ]] 如果$a以"z"开头(模式匹配)那么将为true
+== 的功能在 [] 和 [[]] 的行为是不同的,例如: `[[ $a == z* ]]` 如果$a以"z"开头(模式匹配)那么将为true
 
 * -z 字符串为 "",返回 true
 * -n 字符串不为 "", -n 在 [] 结构内测试,必须用 `""` 将变量引起来.(习惯:使用`""`包裹变量)
@@ -281,64 +298,68 @@ fi
 
 #### RANDOM 生成随机数字
 
+```shell script
+# Well, seeing how this //is// BASH-hackers.org I kinda missed the bash way of doing the above ;-) 
+# print a number between 0 and 500 :-)
+printf $((  500 *  RANDOM  / 32767   ))
 
-        # Well, seeing how this //is// BASH-hackers.org I kinda missed the bash way of doing the above ;-) 
-        # print a number between 0 and 500 :-)
-        printf $((  500 *  RANDOM  / 32767   ))
-        
-        # Or print 30 random  numbers between 0 and 10 ;)
-        X=0; while (( X++ < 30 )); do echo $((  10 *  RANDOM  / 32767   )); done
+# Or print 30 random  numbers between 0 and 10 ;)
+X=0; while (( X++ < 30 )); do echo $((  10 *  RANDOM  / 32767   )); done
 
 ####  -EOF 和<<EOF 区别?
 
-    cat <<EOF
-        If you would like to use Docker as a non-root user
-    EOF
-    ## EOF 前面有个制表符, -EOF 容错率更高
-    cat <<-EOF
-        If you would like to use Docker as a non-root user
-    EOF
-
+cat <<EOF
+    If you would like to use Docker as a non-root user
+EOF
+## EOF 前面有个制表符, -EOF 容错率更高
+cat <<-EOF
+    If you would like to use Docker as a non-root user
+EOF
+```
 
 #### 数组
 
-    array_name=(value0 value1 value2 value3)
+```shell script
+array_name=(value0 value1 value2 value3)
 
-    # 循环 ${array_name[@]} or ${array_name[*]}
-    for i in ${array_name[@]}; do
-        echo $i
-    done
-    # 长度
-    ${#array_name[@]}
-
+# 循环 ${array_name[@]} or ${array_name[*]}
+for i in ${array_name[@]}; do
+    echo $i
+done
+# 长度
+echo ${#array_name[@]}
+```
 #### 格式话输出
 
-    
-    printf "%d %s \n" 1 "abc"
-    # 9000 转换为 16进制(32位,不足的前面补0)
-    printf "%032x\n" 9000
+
+```shell script
+printf "%d %s \n" 1 "abc"
+# 9000 转换为 16进制(32位,不足的前面补0)
+printf "%032x\n" 9000
+```
 
 #### for
-
-    echo '-----1..100-----'
-    for loop in {1..100}; do
-        echo $loop
-    done
-    echo '-----seq-----'
-    for loop in $(seq 1 100); do
-        echo $loop
-    done
-    echo '-----for-----'
-    for ((i = 1; i <= 100; i++)); do
-        echo $i
-    done
-
+```shell script
+echo '-----1..100-----'
+for loop in {1..100}; do
+    echo $loop
+done
+echo '-----seq-----'
+for loop in $(seq 1 100); do
+    echo $loop
+done
+echo '-----for-----'
+for ((i = 1; i <= 100; i++)); do
+    echo $i
+done
+````
 
 #### 文件解压
 
-    # 解压文件去除第一层文件夹  (--strip-path 或者 --strip-components )
-    tar zxvf test.tar.gz --strip-components 1 -C web
-
+```shell script
+# 解压文件去除第一层文件夹  (--strip-path 或者 --strip-components )
+tar zxvf test.tar.gz --strip-components 1 -C web
+````
 
 #### 输入输出流
 
@@ -406,7 +427,7 @@ fi
 
 set命令的上面这四个参数，一般都放在一起使用。
 
-```
+```shell script
 # 写法一
 set -euxo pipefail
 
@@ -423,8 +444,9 @@ $ bash -euxo pipefail script.sh
 ```
 #### eval
 
-> $($n): eval  把$n 当作一个shell命令。 
-```
+> $($n): eval  把$n 当作一个shell命令。
+ 
+```shell script
 $ set -- one two three  # 设置 $1 $2 $3
 $ echo $1
 one
@@ -453,7 +475,8 @@ one
 
 
 1. function 返回状态码
-```
+
+```shell script
 function get-num-nodes(){
     return 0
 }
@@ -463,7 +486,8 @@ if ! get-num-nodes ;then
 fi
 ```
 2. 全局变量,获取返回值
-```
+
+```shell script
 num=10
 add(){
     ((num++))
@@ -472,7 +496,7 @@ add
 echo $num
 ```
 3. 标准输入输出获取返回值
-```
+```shell script
 function get-num-nodes(){
     echo 'the function echo value' >&1
 }
@@ -480,7 +504,7 @@ EXPECTED_NUM_NODES=$(get-num-nodes)
 echo $EXPECTED_NUM_NODES
 ```
 4. 通过 $? 获取返回值
-```
+```shell script
 function get-num-nodes(){
     return 100
 }
@@ -491,7 +515,7 @@ echo $EXPECTED_NUM_NODES
 ```
 
 #### 背景颜色
-```
+```shell script
 color_norm="\033[0m"
 color_black="\033[30m"
 color_red="\033[31m"
@@ -510,22 +534,22 @@ echo -e "${color_red} Failed to get nodes.${color_norm}"
 * -r 只读
     declare -r var1
 * -i 整数声明
+```shell script
+declare -i number
+number=3
+echo "Number = $number"     # Number = 3
+# 错误类型
+number=three
+echo "Number = $number"     # Number = 0
+# 脚本尝试把字符串"three"作为整数来求值(译者注：当然会失败，所以出现值为0).
 
-    declare -i number
-    number=3
-    echo "Number = $number"     # Number = 3
-    # 错误类型
-    number=three
-    echo "Number = $number"     # Number = 0
-    # 脚本尝试把字符串"three"作为整数来求值(译者注：当然会失败，所以出现值为0).
+# 某些算术计算允许在被声明为整数的变量中完成，而不需要特别使用expr或let来完成。
+n=6/3
+echo "n = $n"       # n = 6/3
     
-    # 某些算术计算允许在被声明为整数的变量中完成，而不需要特别使用expr或let来完成。
-    n=6/3
-    echo "n = $n"       # n = 6/3
-        
-    declare -i n
-    n=6/3
-    echo "n = $n"       # n = 2
+declare -i n
+n=6/3
+echo "n = $n"       # n = 2
         
 * -a 数组声明
     
@@ -537,7 +561,10 @@ echo -e "${color_red} Failed to get nodes.${color_norm}"
 * -x 将声明一个变量作为脚本的环境变量而被导出
         declare -x var3=373
 * -A 字典类型声明
+
 ```
+
+```shell script
 declare -A MasterDict
 MasterDict=(['k8s-m1']=10.0.6.166 ['k8s-m2']=10.0.6.167 ['k8s-m3']=10.0.6.168)
 for NODE in "${!MasterDict[@]}"; do
@@ -546,7 +573,8 @@ done
 ``` 
     
 例子
-``` 
+
+```shell script
 func1(){
     echo This is a function
 }
@@ -576,7 +604,8 @@ decleae -f # 列出上面的函数
         .tar.bz
 
 #### 信号 和 Traps
-```
+
+```shell script
 # test trap command
 trap "echo 'Sorry! I have trapped Ctrl-C';exit" SIGINT
 
@@ -593,7 +622,8 @@ done
 echo The end.
 ```
 #### 数据类型判断
-```
+
+```shell script
 ## 类型判断
 function check(){
     local a="$1"
@@ -609,14 +639,14 @@ echo $(check 'name')
 ```
 ##### awk  结合 for 循环
 
-```
+```shell script
 ips=$(cat ~/.ssh/config | grep 'HostName' | awk '{print $2}')
 for i in `echo $ips`;do
         ssh-copy-id -i ~/.ssh/id_rsa.pub $i
 done
 ```
 ##### Check for a Command in PATH
-```
+```shell script
 # which,hash,command
 # if which ls >/dev/null 2>&1; then
 # if command -v ls >/dev/null 2>&1; then
@@ -632,11 +662,13 @@ fi
 - 调试信息可以使用 `logger` 写入到系统日志里面
 - 注入调试代码
     
-    
-    echo "DEBUG: current i = $i " >&2
-    foo=$(< inputfile)
-    printf "DEBUG: foo is |%q|\n" "$foo" >&2
-    # exposes whitespace (such as CRs, see below) and non-printing characters
+```shell script
+echo "DEBUG: current i = $i " >&2
+foo=$(< inputfile)
+printf "DEBUG: foo is |%q|\n" "$foo" >&2
+# exposes whitespace (such as CRs, see below) and non-printing characters
+
+```
 
 使用 shell 调试输出
 
@@ -648,7 +680,8 @@ fi
 
 调试脚本例子:
 
-```    
+```shell script
+
 debugme() {
     [[ $script_debug = 1 ]] && "$@" || :
     # be sure to append || : or || true here or use return 0, since the return code
@@ -662,21 +695,23 @@ script_debug=1
 debugme logger "Sorting the database"
 database_sort
 debugme logger "Finished sorting the database, exit code $?"
-```    
+
+```
 
 当然，这可以用于在调试期间执行除echo之外的其他操作：
 
-```   
+```shell script
 debugme set -x
-＃...一些代码......
+# ...一些代码......
 debugme set + x
-```
+````
 
 [比较完善的例子](../tools/debug.sh)
 
 
 ftp 例子:
-```
+
+```shell script
 if [[ $DRY_RUN = yes ]]; then
   sed 's/^/DRY_RUN FTP: /'
 else
@@ -742,7 +777,7 @@ FTP
 
 除数保留小数点
 
-```
+```shell script
 # 由于 expr 不支持浮点除法,所以这里借助 bc 工具
 echo "scale=2;10.1/2" | bc
 # 或者借助 awk
@@ -751,7 +786,7 @@ awk 'BEGIN{printf "%.2f\n",10.1/2}'
 ```
 
 ##### expr
-```
+```shell script
 expr --help
     match STRING REGEXP        same as STRING : REGEXP
     substr STRING POS LENGTH   substring of STRING, POS counted from 1
@@ -760,7 +795,8 @@ expr --help
 ```
 
 例子:
-```
+
+```shell script
 ### 字符串截取
 str=abc1212abc 
 echo ${str:0:4} 

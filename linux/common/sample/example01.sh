@@ -25,14 +25,16 @@ function kubectl_retry(){
         tries=$((tries-1))
         if [[ ${tries} -le 0 ]];then
             echo "('kubectl $@' failed, giving up)" >&2
-            return 1   
+            return 1
         fi
         echo "(kubectl failed, will retry ${tries} times)" >&2
         sleep 1
     done
 }
+
+
 # kubectl_retry $@
-# output: 
+# output:
 # failure
 # (kubectl failed, will retry 2 times)
 # success
