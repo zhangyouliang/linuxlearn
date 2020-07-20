@@ -11,9 +11,9 @@ ubuntu 使用 nfs
 
 在安装NFS内核服务器之前，我们需要通过以下apt命令以sudo的形式将系统的存储库索引更新为Internet的存储库索引：
 
-
-    sudo apt-get update
-
+```
+sudo apt-get update
+```
 
 上面的命令允许我们通过Ubuntu存储库安装最新的软件版本。
 
@@ -21,7 +21,9 @@ ubuntu 使用 nfs
 现在，运行以下命令以在系统上安装NFS内核服务器：
 
 
-    sudo apt install nfs-kernel-server
+```
+sudo apt install nfs-kernel-server
+```
 
 
 系统将提示您使用Y/n选项确认是否要继续安装。 请输入Y然后按Enter继续，之后软件将成功安装在您的系统上。
@@ -32,12 +34,15 @@ ubuntu 使用 nfs
 
 使用以下命令，根据需要通过以下命令指定安装文件夹名称：
 
-    sudo mkdir -p /mnt/linuxidc
+```
+sudo mkdir -p /mnt/linuxidc
+```
 
 因为我们希望所有客户端都能访问该目录，我们将通过以下命令删除文件夹的限制权限：
 
-    sudo chown nobody:nogroup /mnt/linuxidc
-
+```
+sudo chown nobody:nogroup /mnt/linuxidc
+```
 
 现在，客户端系统上所有组的所有用户都可以访问我们的“共享文件夹”。
 
@@ -48,8 +53,9 @@ ubuntu 使用 nfs
 
 创建导出文件夹后，我们需要为客户端提供访问主机服务器计算机的权限。 此权限是通过位于系统的/etc文件夹中的exports文件定义的。 请使用以下命令通过Nano编辑器打开此文件：
 
-    sudo nano /etc/exports
-
+```
+sudo nano /etc/exports
+```
 
 编辑此文件需要root访问权限; 因此，您需要在命令中使用sudo。 您也可以在任何您喜欢的个人文本编辑器中打开该文件。
 
@@ -85,25 +91,35 @@ ubuntu 使用 nfs
 
 在主机系统中完成上述所有配置后，现在可以通过以下命令将共享目录导出：
 
-    sudo exportfs -a
+```
+sudo exportfs -a
+```
 
- 最后，为了使所有配置生效，请按如下方式重新启动NFS服务器：
+最后，为了使所有配置生效，请按如下方式重新启动NFS服务器：
 
-    sudo systemctl restart nfs-kernel-server
+```
+sudo systemctl restart nfs-kernel-server
+```
 
 **第5步：为客户端打开防火墙**
 
 重要的一步是验证服务器的防火墙是否对客户端开放，以便他们可以访问共享内容。 以下命令将配置防火墙以通过NFS授予客户端访问权限：
 
-    sudo ufw allow from [clientIP or clientSubnetIP] to any port nfs
+```
+sudo ufw allow from [clientIP or clientSubnetIP] to any port nfs
+```
 
 在我们的示例中，我们通过以下命令访问客户端计算机的整个子网：
 
-    sudo ufw allow from 192.168.182.0/24 to any port nfs
+```
+sudo ufw allow from 192.168.182.0/24 to any port nfs
+```
 
 现在，当您通过以下命令检查Ubuntu防火墙的状态时，您将能够将操作状态视为客户端IP的“允许”。
 
-    sudo ufw status
+```
+sudo ufw status
+```
 
 您的主机服务器现在已准备好通过NFS服务器将共享文件夹导出到指定的客户端。
 
@@ -117,14 +133,17 @@ ubuntu 使用 nfs
 
 在安装NFS Common应用程序之前，我们需要通过以下apt命令以sudo的形式更新我们系统的存储库索引和Internet的索引：
 
-    sudo apt-get update
-
+```
+sudo apt-get update
+```
 
 上面的命令允许我们通过Ubuntu存储库安装最新的软件版本。
 
 现在，运行以下命令以在系统上安装NFS Common客户端：
 
-    sudo apt-get install nfs-common
+```
+sudo apt-get install nfs-common
+```
 
 系统将提示您使用Y/n选项确认是否要继续安装。 请输入Y然后按Enter继续，之后软件将成功安装在您的系统上。
 
@@ -132,7 +151,9 @@ ubuntu 使用 nfs
 
 您的客户端系统需要一个目录，可以访问导出文件夹中主机服务器共享的所有内容。 您可以在系统的任何位置创建此文件夹。 我们在客户端机器的mnt目录中创建一个mount文件夹：
 
-    sudo mkdir -p /mnt/linuxidc_client
+```
+sudo mkdir -p /mnt/linuxidc_client
+```
 
 在Ubuntu 18.04 LTS上安装NFS服务器和客户端
 
@@ -142,11 +163,15 @@ ubuntu 使用 nfs
 
 使用以下命令将共享文件夹从主机安装到客户端上的装入文件夹：
 
-    sudo mount serverIP:/shareFolder_server /mnt/mountfolder_client
+```
+sudo mount serverIP:/shareFolder_server /mnt/mountfolder_client
+```
 
 在我们的示例中，我们运行以下命令将“linuxidc”从服务器导出到客户端计算机上的mount文件夹“linuxidc_client”：
 
-    sudo mount 192.168.182.172:/mnt/linuxidc /mnt/linuxidc_client
+```
+sudo mount 192.168.182.172:/mnt/linuxidc /mnt/linuxidc_client
+```
 
 **第4步：测试连接**
 
@@ -155,26 +180,28 @@ ubuntu 使用 nfs
 
 **清理工作**
 
-    # 服务端: 10.0.0.148, 客户端: 10.0.0.149
-    # 客户端
-    sudo umount 10.0.0.148:/mnt/linuxidc
-    # 查看是否已经卸载
-    mount  | grep linuxidc
+```
+# 服务端: 10.0.0.148, 客户端: 10.0.0.149
+# 客户端
+sudo umount 10.0.0.148:/mnt/linuxidc
+# 查看是否已经卸载
+mount  | grep linuxidc
 
-    # 客户端查看服务端
-    showmount -e 10.0.0.148
-    Export list for 10.0.0.148:
-    /mnt/linuxidc 10.0.0.0/24
+# 客户端查看服务端
+showmount -e 10.0.0.148
+Export list for 10.0.0.148:
+/mnt/linuxidc 10.0.0.0/24
 
-    # 清除  /etc/exports 中的挂载内容
-    .....
-    # reload 配置
-    exportfs -a
-    # 重启服务
-    sudo systemctl restart nfs-server.service 
-    # 查看服务端已经没有导出列表了
-    showmount -e 10.0.0.148
-    Export list for 10.0.0.148:
+# 清除  /etc/exports 中的挂载内容
+.....
+# reload 配置
+exportfs -a
+# 重启服务
+sudo systemctl restart nfs-server.service 
+# 查看服务端已经没有导出列表了
+showmount -e 10.0.0.148
+Export list for 10.0.0.148:
+```
 
 
 总结
