@@ -1,8 +1,15 @@
 #!/bin/bash
 
+# 一个练习脚本
+
+
 # export DEBUG=true
 # 如果 DEBUG 存在,则设置 -x
 [ -n "$DEBUG" ] && set -x
+
+HELP=''
+CHECK=''
+REMOVE=''
 
 PROXY=''
 NEW_VER=''
@@ -53,6 +60,25 @@ while [[ $# > 0 ]];do
         VERSION="$2"
         shift
         ;;
+        --extract)
+        VSRC_ROOT="$2"
+        shift
+        ;;
+        --extractonly)
+        EXTRACT_ONLY="1"
+        ;;
+        -l|--local)
+        LOCAL="$2"
+        LOCAL_INSTALL="1"
+        shift
+        ;;
+        --source)
+        DIST_SRC="$2"
+        shift
+        ;;
+        --errifuptodate)
+        ERROR_IF_UPTODATE="1"
+        ;;
         *)
         # unknow option
         ;;
@@ -64,7 +90,7 @@ done
 ###############################
 
 colorEcho(){
-    # ${@:2} 参数截取,从 $2 开始 
+    # ${@:2} 参数截取,从 $2 开始
     echo -e "\033[${1}${@:2}\033[0m" 1>& 2
 }
 
@@ -117,7 +143,7 @@ download_gonelist(){
     mkdir -p /tmp/gonelist
     if [[ "${DIST_SRC}" ]];then
         DOWNLOAD_LINK="https://gonelist.cugxuan.cn/d/gonelist-release/gonelist_linux_${VDIS}.tar.gz"
-    else 
+    else
         DOWNLOAD_LINK="https://github.com/cugxuan/gonelist/releases/download/${NEW_VER}/gonelist_linux_${VDIS}.tar.gz"
     fi
     colorEcho ${BLUE} "Downloading Gonelist: ${DOWNLOAD_LINK}"
@@ -159,10 +185,10 @@ getPMT(){
     if [[ -n `command -v apt-get` ]];then
         CMD_INSTALL="apt-get -y -qq install"
         CMD_UPDATE="apt-get -qq update"
-    elif [[ -n `command -v yum`]];then
+    elif [[ -n `command -v yum` ]];then
         CMD_INSTALL="yum -y -q install"
         CMD_UPDATE="yum -q makecache"
-    elif [[ -n `command -v zypper`]];then
+    elif [[ -n `command -v zypper` ]];then
         CMD_INSTALL="zypper -y install"
         CMD_UPDATE="zypper ref"
     else
@@ -215,6 +241,7 @@ getVersion(){
 }
 
 stop_gonelist(){
+    colorEcho ${BLUE} "Shutting down Gonelist service."
     # 如果 SYSTEMCTL_CMD 不存在,说明 systemctl 命令不存在 , 后继 -f xxx 命令不在判断
     if [[ -n "$SYSTEMCTL_CMD" ]] || [[ -f "/lib/systemd/system/gonelist.service" ]];then
         echo ${SYSTEMCTL_CMD} stop gonelist
@@ -223,9 +250,106 @@ stop_gonelist(){
     fi
 
     if [[ $? -ne 0 ]];then
+        colorEcho ${YELLOW} "Failed to shutdown Gonelist service."
         return 2
     fi
     return 0
 }
 
-# https://github.com/zhangguanzhang/gonelist/blob/master/scripts/install-release.sh
+install_gonelist(){
+   # Install gonelist binary and dist dir to /usr/local/gonelist/
+   local file=$1
+   local arch=$2
+   mkdir -p '/etc/gonelist/' '/usr/local/gonelist/' && \
+   [ -d /usr/local/gonelist/dist ] && rm -rf /usr/local/gonelist/dist
+   tar zxf ${file} -C '/usr/local/gonelist/' --strip-components=1 && \
+   mv /usr/local/gonelist/gonelist_linux_${arch} /usr/local/gonelist/gonelist && \
+   chmod +x '/usr/local/gonelist/gonelist' || {
+        colorEcho ${RED} "Failed to copy gonelist binary and resources."
+        return 1
+   }
+
+   # Install gonelist server config to /etc/gonelist
+   if [ ! -f '/etc/gonelist/config.json' ]; then
+       cp /usr/local/gonelist/config.json /etc/gonelist/config.json
+       sed -ri '/dist_path/s#: "[^"]+#: "/usr/local/gonelist/dist/#' /etc/gonelist/config.json
+   fi
+}
+
+installInitScript(){
+  if [[ -n "${SYSTEMCTL_CMD}" ]]; then
+    if [ ! -f "/etc/systemd/system/gonelist.service" && ! -f "/lib/systemd/system/gonelist.service" ]; then
+        cat>/etc/systemd/system/gonelist.service<<'EOF'
+[Unit]
+Description=gonelist - Golang Onedrive List
+Documentation=https://github.com/cugxuan/gonelist
+After=network.target
+Wants=network-online.target
+[Service]
+# If the version of systemd is 240 or above, then uncommenting Type=exec and commenting out Type=simple
+#Type=exec
+Type=simple
+#User=root
+NoNewPrivileges=yes
+ExecStart=/usr/local/gonelist/gonelist --conf /etc/gonelist/config.json
+Restart=on-failure
+RestartSec=4s
+LimitNOFILE=65535
+[Install]
+WantedBy=multi-user.target
+EOF
+	systemctl enable gonelist.service
+    fi
+  elif [[ -n "${SERVICE_CMD}" ]] && [[ ! -f "/etc/init.d/gonelist" ]]; then
+    installSoftware 'daemon' && \
+    echo todo rc.d && \
+    chmod +x '/etc/init.d/gonelist' && \
+    update-rc.d gonelist defaults
+  fi
+}
+
+Help(){
+  cat - 1>&2 << EOF
+./install-release.sh [-h] [-c] [--remove] [-p proxy] [-f] [--version vx.y.z] [-l file]
+  -h, --help            Show help
+  -p, --proxy           To download through a proxy server, use -p socks5://127.0.0.1:1080 or -p http://127.0.0.1:3128 etc
+  -f, --force           Force install
+  -l, --local           Install from a local file
+      --remove          Remove installed gonelist
+  -c, --check           Check for update
+EOF
+}
+
+remove(){
+  echo 1
+  # ......
+}
+checkUpdate(){
+  echo 1
+  # .....
+}
+
+main(){
+  #helping information
+  [[ "$HELP" == "1" ]] && Help && return
+  [[ "$CHECK" == "1" ]] && checkUpdate && return
+  [[ "$REMOVE" == "1" ]] && remove && return
+
+  local ARCH=$(uname -m)
+  VDIS=$(archAffix)
+
+  # .....
+}
+
+
+main
+
+
+
+# ref : https://github.com/zhangguanzhang/gonelist/blob/master/scripts/install-release.sh
+
+
+
+
+
+
