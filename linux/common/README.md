@@ -4,10 +4,47 @@
 * $n 传递给脚本或函数的参数,n 代表是一个数字,表示第几个参数.例如，第一个参数是$1，第二个参数是$2。
 * $# 传递给脚本或函数的参数个数
 * $@ 传递给脚本或函数的所有参数(分别表示)
-* $* 传递给脚本或函数的所有参数(以一个整体)
+* $* 传递给脚本或函数的所有参数,必须被 "" 引用 (作为一个单词)
 * $$ 当前 shell 进程ID
+* $! 在后台运行的最后的工作的PID
 * $? 上一个命令退出状态.或者函数的返回值
-* $_ 上一个命令的路径 比如: git clone https://github.com/xxx/xx.git xx && cd $_
+* $_ 保存之前执行的命令的最后一个参数 
+    - 比如: git clone https://github.com/xxx/xx.git xx && cd $_
+
+* 当前函数的名字 $FUNCNAME
+* 当前行号 $LINENO
+
+#### IFS
+> Linux下有一个特殊的环境变量叫做IFS，叫做内部字段分隔符
+> 默认情况下，bash shell会将下面的字符当做字段分隔符：空格、制表符、换行符。
+
+```bash
+IFS="," read -r -a test <<< `echo 1,2,3,4,5,6`
+# test 变量则为数组
+declare -p test # declare -a test=([0]="1" [1]="2" [2]="3" [3]="4" [4]="5" [5]="6")
+
+```
+
+
+#### 变量间接引用
+
+```bash
+# a 变量的值是 b 变量的名字
+a=letter_of_alphabet
+letter_of_alphabet=z
+eval a=\$$a
+
+echo "Now a = $a"
+
+# 引用位置参数
+args=$#
+lastarg=${!args}
+echo $lastarg
+lastarg=${!#}
+echo $lastarg
+```
+
+
 
 #### 变量替换
 

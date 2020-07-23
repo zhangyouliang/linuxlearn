@@ -23,7 +23,12 @@ echo ${indices[*]} # 数组全部元素
 echo ${#indices[@]} # 数组长度
 echo ${indices[@]:1:2} # 数组分片访问
 unset indices[1] # 删除下标为1的元素
-echo ${indices[@]}
+echo ${indices[@]} # 数组全部元素
+echo ${!indices[@]} # 获取全部下标
+echo '## 数组遍历'
+for i in "${!indices[@]}";do
+    echo "$i : ${indices[$i]}"
+done
 echo '## 数组遍历'
 # 为啥加双引号,不存在空格时 @ 和 * 都没问题
 # 一旦出现空格,将导致不可预料的问题

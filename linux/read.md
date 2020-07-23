@@ -10,6 +10,7 @@
     -p 可以指定一个提示信息 例如:read -p "Enter your name:" name 
     -n 表示接受多少个字符
     -s 不输出到屏幕
+    -a xxx 将内容读入到变量 xxx
 
 例子
 ---
