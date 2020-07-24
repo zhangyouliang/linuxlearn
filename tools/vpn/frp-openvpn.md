@@ -23,7 +23,7 @@ wget https://github.com/fatedier/frp/releases/download/v0.33.0/frp_0.33.0_linux_
 ```bash
 # 打开 Tunnelblick
 # 打通 10.0.0.148 与本地的网络 
-sudo route -n add -net 10.0.0.148 -netmask 255.255.240.0 10.8.0.1
+sudo route -n add -host 10.0.0.148  10.8.0.1   
 # 编辑 frps.ini
 cat >> /etc/frp/frps.ini << EOF
 [common]
@@ -119,7 +119,7 @@ sudo launchctl load -w ~/Library/LaunchAgents/frpc.plist
 ````bash
 # 打开 Tunnelblick 
 # 打通 10.0.0.148 与本地的网络
-sudo route -n add -net 10.0.0.148 -netmask 255.255.240.0 10.8.0.1
+sudo route -n add -host 10.0.0.148  10.8.0.1   
 ````
 
 mac 电脑打开 finder > 前往 > 连接服务器
@@ -211,8 +211,8 @@ traceroute to 10.42.212.115 (10.42.212.115), 64 hops max, 52 byte packets
  2  10.42.77.57 (10.42.77.57)  10.325 ms  10.634 ms  10.757 ms
  3  10.42.44.58 (10.42.44.58)  10.985 ms  11.016 ms  10.558 ms
  4  10.42.212.115 (10.42.212.115)  10.452 ms  11.051 ms  10.532 ms
-➜  ~ sudo route -n add -net 10.0.0.148 -netmask 255.255.240.0 10.8.0.1
-add net 10.0.0.148: gateway 10.8.0.1
+➜  ~ sudo route -n add -host 10.0.0.148  10.8.0.1   
+add host 10.0.0.148: gateway 10.8.0.1
 ➜  ~ ping 10.0.0.148
 PING 10.0.0.148 (10.0.0.148): 56 data bytes
 64 bytes from 10.0.0.148: icmp_seq=0 ttl=62 time=10.597 ms
