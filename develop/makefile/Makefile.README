@@ -33,29 +33,41 @@ var-lost1:
 	export foo=bar
 	echo "foo=[$$foo]"
 
-var-lost2:
-	export foo=bar \
-	echo "foo=[$$foo]"
+# 可以取到 foo 变量
+var-kept:
+	export foo=bar; echo "foo=[$$foo]"
 
+# 在执行时扩展，允许递归扩展。
 VARIABLE1 = value1
+# 在定义时扩展。
 VARIABLE2 := value2
 # 只有在该变量为空时才设置值。
 VARIABLE2 ?= value3
 
+# 将值追加到变量的尾端。
+VARIABLE3 += value
+
+
 # define 和 info 函数
 SHELL := /bin/bash
+
 define ALL_HELP_INFO
 endef
 test_info:
 	$(info KUBE_GOFLAGS is now deprecated. Please use GOFLAGS instead.)
 
+# @# 关闭回声
+# @echo 正常输出 (不会输出当前执行的命令)
 test:
-	# @# 关闭回声
+	# 1) @# 关闭回声
 	@# 这是测试
-	# 正常输出
+	# 2)关闭回声,正常输出
 	@echo TODO
 	@echo $(VARIABLE1)
 	@echo $(VARIABLE2)
+	@echo $(VARIABLE3)
+	# 3) 未关闭回声,输出  echo abc value1
+	echo abc $(VARIABLE1)
 
 # 判断 $(VARIABLE1) 是否等于 value1
 ifeq ($(VARIABLE1),value1)
@@ -73,4 +85,5 @@ all:
 # error 错误输出
 ERR = $(error found an error!)
 .PHONY: err
-err: $(ERR)
+err:
+	$(ERR)
