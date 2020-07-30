@@ -15,6 +15,8 @@ ubuntu 常用安装包[[官方包搜索地址]](https://packages.ubuntu.com/)
     * turbostat
     * .....
 * ncdu: 磁盘占用分析工具 (平时使用: du -ah --max-depth=1 /)
+   - 排除 nas 目录,扫描 / 根目录: ncdu --exclude=/root/nas /
+* [其他工具](./tools/README.md)
 
 ubuntu 更换阿里数据源
 ------

@@ -32,8 +32,8 @@ awk的工作原理
 > awk 'BEGIN{ commands } pattern{ commands } END{ commands }'
 
 
-- 第一步：执行BEGIN{ commands }语句块中的语句；
-- 第二步：从文件或标准输入(stdin)读取一行，然后执行pattern{ commands }语句块，它逐行扫描文件，从第一行到最后一行重复这个过程，直到文件全部被读取完毕。
+- 第一步：执行`BEGIN{ commands }`语句块中的语句；
+- 第二步：从文件或标准输入(stdin)读取一行，然后执行`pattern{ commands }`语句块，它逐行扫描文件，从第一行到最后一行重复这个过程，直到文件全部被读取完毕。
 - 第三步：当读至输入流末尾时，执行END{ commands }语句块。
 
 **BEGIN**语句块在awk开始从输入流中读取行之前被执行，这是一个可选的语句块，比如变量初始化、打印输出表格的表头等语句通常可以写在BEGIN语句块中。
@@ -61,7 +61,7 @@ awk内置变量（预定义变量）
 
     $n 当前记录的第n个字段，比如n为1表示第一个字段，n为2表示第二个字段。 
     $0 这个变量包含执行过程中当前行的文本内容。
-    NF 显示当前行字符串的长度
+    NF 表示字段数，在执行过程中对应于当前的字段数。
     $NF 显示当前字符串
     NR 显示当前行号
     
@@ -111,7 +111,11 @@ length(string)：返回字符串长度
 > getline 命令是 awk 当中非常强大的一个功能
 
 getline命令执行后，awk会设置NF，NR，FNR和$0等这些内部变量。
-
+    
+    # 获取偶数
+    # 总行数必须为偶数,否则,将强制携带最后一条数据,
+    # 例如: seq 9 | awk '{getline; print $0}' 
+    # 将显示 9
     seq 10 | awk '{getline; print $0}'
     2
     4
@@ -123,6 +127,7 @@ getline命令执行后，awk会设置NF，NR，FNR和$0等这些内部变量。
 
 > getline 获取当前行的下一行
 
+    # 获取奇数
     seq 10 | awk '{print $0;getline}'
     1
     3
@@ -130,7 +135,7 @@ getline命令执行后，awk会设置NF，NR，FNR和$0等这些内部变量。
     7
     9
 
-打印偶数行的唯一区别就是print $0和getline的顺序不一样。因为getline在print $0之后，此时的$0仍然是第一行。然后getline，$0变成了下一行2。依次类推，就打印出了奇数行。
+打印偶数行的唯一区别就是`print $0`和 `getline` 的顺序不一样。因为 `getline` 在`print $0`之后，此时的`$0`仍然是第一行。然后`getline`，`$0`变成了下一行2。依次类推，就打印出了奇数行。
 
 
 getline也可以用来执行一个UNIX命令，并得到它的输出。下面例子通过getline得到系统的当前时间
