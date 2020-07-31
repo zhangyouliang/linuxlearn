@@ -7,6 +7,7 @@
 选项
 ---
     -c或——complerment：取代所有不属于第一字符集的字符；
+        - 随机生成字符串: cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 50
     -d或——delete：删除所有属于第一字符集的字符；
     -s或--squeeze-repeats：把连续重复的字符以单独一个字符表示；
     -t或--truncate-set1：先删除第一字符集较第二字符集多出的字符。

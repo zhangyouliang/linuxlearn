@@ -39,7 +39,7 @@
     cut -f3 --complement filename
     
     # -d 指定定界符
-    cut -f2 -d';' filename
+    cut -f2 -d; filename
     
 cut 取值范围
 > Use  one, and only one of -b, -c or -f.
@@ -47,6 +47,15 @@ cut 取值范围
     N-   第N个字符到结尾
     -M   从第一个到第M个
     N-M  N到M个字段
+    
+
+```bash
+# 显示第一个字符
+echo "1,2,3,4,5,6" | cut -d, -f1 # 1
+# 字符串截取
+echo "1,2,3,4,5,6" | cut -d,  -f1-3 # 1,2,3
+```
+    
 
 
 cut 取的单位
@@ -56,5 +65,4 @@ cut 取的单位
     -f 以字段为单位
 
 
-    
     
