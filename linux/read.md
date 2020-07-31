@@ -15,7 +15,7 @@
 例子
 ---
 
-```
+```bash
 # 清空文件
 
 :> file
@@ -49,6 +49,29 @@ done
 # 读取文件的前三列（前三个字段）并赋值给三个变量
 read lines words chars file < <(wc read.md)
 echo $lines $words $chars $file
+
+# 将字符串 1:2:3:4 => 1234
+# 方法1
+str="1:2:3:4"
+read -a test <<< $(echo $str | tr ':' ' ')
+# 查看 $test 类型
+declare -p test
+function kube::util::join {
+   local IFS="$1"
+   shift
+   echo "$*"
+}
+kube::util::join '' "${test[@]}"
+
+# 方法2
+for i in $(echo $str | tr ':' ' ');do
+    echo -n ${i}
+done
+
+
+
+
+
 
 ```
 
