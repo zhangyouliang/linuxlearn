@@ -225,18 +225,18 @@ awk 正则表达式
 
 统计`netstat -anp` 状态为 `LISTEN` 和 `CONNECT` 的连接数量分别是多少
 
-    netstat -anp|awk '$6~/LISTEN|CONNECTED/{sum[$6]++} END{for (i in sum) printf "%-10s %-6s %-3s \n", i," ",sum[i]}'
+    netstat -anp | awk '$6~/LISTEN|CONNECTED/{sum[$6]++} END{for (i in sum) printf "%-10s %-6s %-3s \n", i," ",sum[i]}'
 
 
 统计 `/home` 目录下不同用户的普通文件的总数是多少？
 
-    ls -l|awk 'NR!=1 && !/^d/{sum[$3]++} END{for (i in sum) printf "%-6s %-5s %-3s \n",i," ",sum[i]}'   
+    ls -l | awk 'NR!=1 && !/^d/{sum[$3]++} END{for (i in sum) printf "%-6s %-5s %-3s \n",i," ",sum[i]}'   
     mysql        199 
-    root           374 
+    root         374 
 
 统计 `/home` 目录下不同用户的普通文件的大小总size是多少？
 
-    ls -l | awk 'NR!=1 && /^d/{sum[$3]+=$5} END{for(i in sum) printf "%-6s %-5s %.3s %-2s \n",i," ",sum[i]/1024/1024,"MB"}
+    ls -l | awk 'NR!=1 && !/^d/{sum[$3]+=$5} END{for(i in sum) printf "%-6s %-5s %.3s %-2s \n",i," ",sum[i]/1024/1024,"MB"}'
 
 
 输出匹配的行的信息
