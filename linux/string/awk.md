@@ -95,13 +95,13 @@ awk内置变量（预定义变量）
 awk 常用内建函数
 ----
 
-index(string,search_string):返回search_string在string中出现的位置
+- index(string,search_string):返回search_string在string中出现的位置
 
-sub(regex,replacement_str,string):将正则匹配到的第一处内容替换为replacement_str;
+- sub(regex,replacement_str,string):将正则匹配到的第一处内容替换为replacement_str;
 
-match(regex,string):检查正则表达式是否能够匹配字符串；
+- match(regex,string):检查正则表达式是否能够匹配字符串；
 
-length(string)：返回字符串长度
+- length(string)：返回字符串长度
 
 
     echo | awk 
@@ -321,6 +321,8 @@ awk 'NR>=2 && NR<=4 {print NR" "$0}' data2.csv
 
 ```bash
 ifconfig enp0s8 | awk -F '[" ":]+' 'NR==2{print $4}'
+# 或者
+ip addr show eth0 | awk -F '[" ":/]+' 'NR==3{print $3}'
 ```
 
 

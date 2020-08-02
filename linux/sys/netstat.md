@@ -51,6 +51,9 @@
 
     # 连接数 >5 的链接情况
     netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n | awk '{ if($1>5) print $1" "$2 }'
+    
+    # watch 监听中的 tcp 端口变化
+    watch netstat -ntl
 
 实时查看连接数
     
