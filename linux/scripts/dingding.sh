@@ -19,6 +19,11 @@ colorEcho(){
 
 
 MAX_TIME_OUT=2.0
+Token=${Token:-""}
+if [[ ${#Token} -eq 0 ]]; then
+    colorEcho ${RED} "Token is Must"
+    exit 0
+fi
 
 url=${url:-"http://dev.api.aidoukankan.com/api/monitor"}
 
@@ -58,7 +63,7 @@ function sendDingDingMsg() {
     }
 EOF`
 
-curl 'https://oapi.dingtalk.com/robot/send?access_token=64594c7ec9a113d686d3e65cec52944a7e4e9c025d8c928b53911aedb4ade345' \
+curl "https://oapi.dingtalk.com/robot/send?access_token=${Token}" \
     -H 'Content-Type:application/json' \
     -d "${template}"
 }
