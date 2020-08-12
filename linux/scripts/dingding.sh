@@ -20,7 +20,7 @@ colorEcho(){
 
 MAX_TIME_OUT=2.0
 
-url=http://dev.api.aidoukankan.com/api/monitor
+url=${url:-"http://dev.api.aidoukankan.com/api/monitor"}
 
 Name=${Name:-"爱豆看看服务"}
 Env=${Env:-"dev"}
@@ -32,6 +32,9 @@ TiggerTime=$(date +"%Y-%m-%d %H:%M:%S")
 res=$(curl --connect-timeout 4 -m 5  -w "%{http_code}:%{time_total}" -so /dev/null ${url})
 read -a arr <<< $(echo ${res} | tr ':' ' ')
 #declare -p arr
+
+Env=${Env:-"dev"}
+echo $Env
 
 # 发送钉钉
 function sendDingDingMsg() {
