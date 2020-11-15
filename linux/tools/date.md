@@ -47,17 +47,26 @@
 ---
 格式化输出：
 
-    date +"%Y-%m-%d"
-    2009-12-07
+```bash
+date +"%Y-%m-%d %H:%M:%S"
+# 2020-08-12 15:21:02
+
+date +"%F %T"
+# 2020-08-12 15:19:58
+```
     
 输出昨天日期：
 
-    date -d "1 day ago" +"%Y-%m-%d"
-    2012-11-19
+```
+date -d "1 day ago" +"%Y-%m-%d"
+# 2012-11-19
+```
 
 ubuntu 修改时区
 
-    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+```bash
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime    
+```
 
 查看时区
 
