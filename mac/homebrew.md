@@ -23,6 +23,13 @@ source ~/.zshrc
 # 更新本地已安装的软件包
 brew update
 brew upgrade --all
+
+brew pin [formula] 固定软件
+brew unpin [formula] 解除固定
+brew upgrade [formula] 升级某一软件
+brew outdated （列出已安装中待升级）
+
+
 # 默认安装位置 
 brew --prefix
 # 清理残留的旧版本及相关日志
@@ -35,6 +42,8 @@ brew config
 brew deps php
 # 列出已安装的软件
 brew ls
+# 主要看具体的信息，比如目前的版本，依赖，安装后注意事项等
+brew info [formula] 
 # 查看已安装的无依赖包
 brew leaves
 
