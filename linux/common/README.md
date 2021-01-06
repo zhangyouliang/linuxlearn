@@ -14,6 +14,18 @@
 * 当前函数的名字 $FUNCNAME
 * 当前行号 $LINENO
 
+#### # sh 妙用
+
+````
+# 将 sh -s 非 -,后面的全部参数,赋值给前面脚本,分别为 $1,$2,$3.....
+curl -fsSL https://raw.githubusercontent.com/zhangyouliang/dockerfile/master/tags.sh | sh -s -- nginx
+
+# 校验
+echo 'echo $@' | sh -s -- 1 2 3 4 5 6
+# output: 1 2 3 4 5 6
+
+````
+
 #### IFS
 > Linux下有一个特殊的环境变量叫做IFS，叫做内部字段分隔符
 > 默认情况下，bash shell会将下面的字符当做字段分隔符：空格、制表符、换行符。
