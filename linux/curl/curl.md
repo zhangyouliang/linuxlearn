@@ -48,6 +48,9 @@ curl -i -X POST -H "Content-type:application/json" -d "app_id=1234&app_secret=12
 # 抓取页面内容到一个文件中
 curl -o home.html  https://www.bing.com/
 
+# 将二进制文件输出到屏幕上面,同时传递给 base64命令
+curl -fL --output -  https://download.docker.com/linux/static/stable/x86_64/docker-17.03.2-ce.tgz  | base64
+
 
 ### Content-Type: application/x-www-form-urlencoded
 # 发送表单信息
