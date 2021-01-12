@@ -10,6 +10,8 @@
 --basic	使用HTTP基本验证
 -c/--cookie-jar <file>	操作结束后把cookie写入到这个文件中
 -d/--data <data>	HTTP POST方式传送数据
+-F/--form <name=content> 模拟http表单提交数据
+    -form-string <name=string> 模拟http表单提交数据
 -D/--dump-header <file>	把header信息写入到该文件中
 -e/--referer	来源网址
 -G/--get	以get的方式来发送数据
@@ -23,6 +25,7 @@
 -s，可以去除统计信息
 -o/--output	把输出写到该文件中
     -os /dev/null 可将统计信息,信息输出都屏蔽掉
+-O/--remote-name 把输出写到该文件中，保留远程文件的文件名
 -u/--user <user[:password]>	设置服务器的用户和密码
 -x/--proxy <host[:port]>	在给定的端口上使用HTTP代理
 -X/--request <command>	指定什么命令
@@ -37,17 +40,57 @@
 ----
 
 ```
+# 获取脚本信息,同时交给 sh 运行
+curl -sSL http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/internet | sh -
 # post 带着请求头,post body并且显示protocol头信息
 curl -i -X POST -H "Content-type:application/json" -d "app_id=1234&app_secret=123" ip.wlwz620.com
+
+# 抓取页面内容到一个文件中
+curl -o home.html  https://www.bing.com/
+
+# 将二进制文件输出到屏幕上面,同时传递给 base64命令
+curl -fL --output -  https://download.docker.com/linux/static/stable/x86_64/docker-17.03.2-ce.tgz  | base64
+
+
+### Content-Type: application/x-www-form-urlencoded
+# 发送表单信息
+curl -X POST --data "data=xxxx&name=123"  ip.wlwz620.com
+# 表单编码
+curl -X POST --data-urlencode "data=xxxx&name=123" ip.wlwz620.com
+
+### Content-Type: multipart/form-data
+curl -F log=aaaa -F pwd=1212121 ip.wlwz620.com 
+# 保存登录信息到文件
+curl -c ./cookie_c.txt  ip.wlwz620.com 
+# 保存头信息
+curl -D ./cookie_D.txt   ip.wlwz620.com 
+# 使用 cookie
+curl -b ./cookie_c.txt   ip.wlwz620.com 
+
 
 # mac 专有命令 dtruss
 # sudo dtruss curl https://www.baidu.com
 time curl https://www.baidu.com
 
-# 发送表单信息
-curl -X POST --data "data=xxxx&name=123"  ip.wlwz620.com
-# 表单编码
-curl -X POST --data-urlencode "data=xxxx&name=123" ip.wlwz620.com
+
+# 显示错误信息
+$ curl -f  www.qingyou.love/aaa
+curl: (22) The requested URL returned error: 404 Not Found
+$ curl www.qingyou.love/aaa    
+{"code":1,"desc":"404"}
+
+
+# 使用代理(本地代理端口为 1081)
+# 等同于: http_proxy=http://127.0.0.1:1081 && export https_proxy=http://127.0.0.1:1081
+# unset http_proxy https_proxy 之后为:  211.161.246.220
+$ curl -x 127.0.0.1:1081 ip.wlwz620.com 
+output: 103.192.225.87
+# 不使用代理
+curl ip.wlwz620.com 
+output: 211.161.246.220
+
+# 显示下载进度条
+curl -f  -# -O http://mirrors.linuxeye.com/oneinstack-full.tar.gz 
 
 
 # curl分析HTTPS请求时间

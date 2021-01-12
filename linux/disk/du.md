@@ -29,7 +29,10 @@
     # 显示目录占用大小
     du -h --max-depth=1 /home
     # mac
-    du -h -d=1 ~
+    du -sh * 
+    
+    #  mac 总大小
+    du -h -d=1 .
     
     # 显示总大小
     du -sh
