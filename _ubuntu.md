@@ -23,47 +23,134 @@ ubuntu 更换阿里数据源
 
 备份系统默认的源（没有root权限的前面加sudo）
 
-    cp /etc/apt/sources.list /etc/apt/sources.list.bak
-    修改/etc/apt/sources.list
+````
+cp /etc/apt/sources.list /etc/apt/sources.list.bak
+````
+
+
+修改/etc/apt/sources.list
+
+
+
+***Ubuntu 14.04.5***
+
+
+```
+
+cat << EOF >/etc/apt/sources.list
+
+deb https://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
+deb https://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
+
+deb https://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
+
+deb https://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
+
+## Not recommended
+# deb https://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
+# deb-src https://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
+EOF
+```
 
 **ubuntu 16.04**
 
 **/etc/apt/sources.list**
 
-    cat >>/etc/apt/sources.list<<EOF
-    # deb cdrom:[Ubuntu 16.04 LTS _Xenial Xerus_ - Release amd64 (20160420.1)]/ xenial main restricted
-    deb-src http://archive.ubuntu.com/ubuntu xenial main restricted #Added by software-properties
-    deb http://mirrors.aliyun.com/ubuntu/ xenial main restricted
-    deb-src http://mirrors.aliyun.com/ubuntu/ xenial main restricted multiverse universe #Added by software-properties
-    deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted
-    deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main restricted multiverse universe #Added by software-properties
-    deb http://mirrors.aliyun.com/ubuntu/ xenial universe
-    deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
-    deb http://mirrors.aliyun.com/ubuntu/ xenial multiverse
-    deb http://mirrors.aliyun.com/ubuntu/ xenial-updates multiverse
-    deb http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse
-    deb-src http://mirrors.aliyun.com/ubuntu/ xenial-backports main restricted universe multiverse #Added by software-properties
-    deb http://archive.canonical.com/ubuntu xenial partner
-    deb-src http://archive.canonical.com/ubuntu xenial partner
-    deb http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted
-    deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main restricted multiverse universe #Added by software-properties
-    deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
-    deb http://mirrors.aliyun.com/ubuntu/ xenial-security multiverse
-    EOF
+````
+cat >>/etc/apt/sources.list<<EOF
+# deb cdrom:[Ubuntu 16.04 LTS _Xenial Xerus_ - Release amd64 (20160420.1)]/ xenial main restricted
+deb-src http://archive.ubuntu.com/ubuntu bionic main restricted #Added by software-properties
+deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted multiverse universe #Added by software-properties
+deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted multiverse universe #Added by software-properties
+deb http://mirrors.aliyun.com/ubuntu/ bionic universe
+deb http://mirrors.aliyun.com/ubuntu/ bionic-updates universe
+deb http://mirrors.aliyun.com/ubuntu/ bionic multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-updates multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse #Added by software-properties
+deb http://archive.canonical.com/ubuntu bionic partner
+deb-src http://archive.canonical.com/ubuntu bionic partner
+deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted multiverse universe #Added by software-properties
+deb http://mirrors.aliyun.com/ubuntu/ bionic-security universe
+deb http://mirrors.aliyun.com/ubuntu/ bionic-security multiverse
+EOF
+````
+
+
+ubuntu 18.04(bionic) 配置如下
+
+````
+cat << EOF >/etc/apt/sources.list
+deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+EOF
+````
+
+ubuntu 20.04(focal) 配置如下
+```
+cat << EOF >/etc/apt/sources.list
+deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+
+deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+EOF
+```
     
 最后更新
 
-    apt-get update
-    
+````
+apt-get update
+````
 # deb 安装缺少依赖?
 ------
 
 使用dpkg -i *.deb 的时候出现依赖没有安装
 
-    apt-get -f -y install 
-    dpkg -i   *.deb
+````
+apt-get -f -y install 
+dpkg -i   *.deb
+````
+
 # 时区设置
 -------
+````
+# 设置时区为上海(+8) 时区
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+````
 
-    # 设置时区为上海(+8) 时区
-    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+
+
+
+参考
+====
+- [阿里云-开发者社区-镜像站-ubuntu](https://developer.aliyun.com/mirror/ubuntu?spm=a2c6h.13651102.0.0.3e221b11aU6qiM)
