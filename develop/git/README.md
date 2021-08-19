@@ -28,6 +28,15 @@ git worktree remove br1
 ```
 
 
+删除远端分支
+
+````shell script
+# 删除远端分支:
+git push origin --delete feature_712716
+# 删除本地分支
+git branch -D feature_72630    
+````
+
 标签
 
 ```shell script
