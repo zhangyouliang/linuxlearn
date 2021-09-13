@@ -1,6 +1,8 @@
 
 使用
 
+> mac > 设置 > 共享 > 远程登录
+
 ````bash
 # linux 服务端运行 frps.sh
 # 需要控制的机器运行 frpc_mac.sh
