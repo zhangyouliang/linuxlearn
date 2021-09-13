@@ -12,29 +12,32 @@
 
 ## $* 和 $@ 的区别
 
-    $* 和 $@ 都表示传递给函数或脚本的所有参数，不被双引号" "包含时，都以"$1" "$2" … "$n" 的形式输出所有参数。
 
-    echo "print each param from\"\$*\""
-    for i in "$*"
-    do
-        echo "$i"
-    done
+`$* 和 $@` 都表示传递给函数或脚本的所有参数，`不被双引号" "包含时`，都以`"$1" "$2" … "$n"` 的形式输出所有参数。
 
-    echo "print each param from\"\$@\""
-    for i in "$@"
-    do
-        echo "$i"
-    done
+````bash
+set 1 2 3 4 5 6
+echo "print each param from\"\$*\""
+for i in "$*"
+do
+    echo "$i" | hexdump -c
+done
 
-    ## 输出
-    print each param from"$*"
-    6
-    stop a b c de f
-    print each param from"$@"
-    stop
-    a
-    b
-    c
-    de
-    f
+echo "print each param from\"\$@\""
+for i in "$@"
+do
+    echo "$i" | hexdump -c
+done
+
+## 输出
+# print each param from"$*"
+# 1 2 3 4 5 6
+# print each param from"$@"
+# 1
+# 2
+# 3
+# 4
+# 5
+# 6
+````
 

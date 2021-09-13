@@ -78,6 +78,14 @@ show_filename
 # 退出函数后再打印IFS看看
 echo -n "$IFS" | hexdump
 
+特殊参数`$*`受`IFS`影响, 可以类比一下 "$@" 和 "$*" 带有引号时的输出区别
+
+````bash
+set 1 2 3 4 5 5
+echo \$*=$*  # output: $*=1 2 3 4 5 5
+echo \$*="$*" # output: $*=1-2-3-4-5-5
+
+````
 
 
 
