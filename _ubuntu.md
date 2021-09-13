@@ -147,7 +147,14 @@ dpkg -i   *.deb
 cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ````
 
+# systemctl 无法使用的问题
+> systemctl无法连接到总线 – docker ubuntu:16.04容器
 
+````
+docker run -ti -d --privileged=true ubuntu:16.06  "/sbin/init"
+````
+`docker run -t -i ubuntu:16.04 /bin/bash`  现在的问题是你的init进程 PID 1是`/bin/bash`，而不是 `systemd`
+除此之外，您将缺少dbus，这将是沟通的方式。这是您的错误消息来自的地方。但是由于PID 1没有系统化，因此无法安装dbus
 
 
 
