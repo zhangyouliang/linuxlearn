@@ -7,14 +7,14 @@
 
 介绍: 利用现有 Tunnelblick 工具. !!!阿里云ecs,负载均衡不需要开启对应端口
 
-> !!! 这里可以不使用  Tunnelblick ,使用 外网 ip 直接映射也可以,需要打开端口 [tcp  6000/6000 (frp ssh) , 5900/5900 (frp vnc) , 7000/7000 (frp server_port) udp: 7000/7000 (frp kcp) ]
+> !!! 这里可以不使用  Tunnelblick ,使用 外网 ip 直接映射也可以,需要打开端口 [tcp  6000/6000 (frp ssh) , 5900/5900 (frp vnc) , 7000/7000 (frp server_port) udp: 7000/7000 (frp tcp) ]
 
 ```bash
 # 根据平台下载,frp 下载页面 https://github.com/fatedier/frp/releases
 # mac 平台
-wget https://github.com/fatedier/frp/releases/download/v0.33.0/frp_0.33.0_darwin_amd64.tar.gz
+wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_darwin_amd64.tar.gz
 # linux 平台
-wget https://github.com/fatedier/frp/releases/download/v0.33.0/frp_0.33.0_linux_amd64.tar.gz
+wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_amd64.tar.gz
 ```
 
 
@@ -24,15 +24,26 @@ wget https://github.com/fatedier/frp/releases/download/v0.33.0/frp_0.33.0_linux_
 # 打开 Tunnelblick
 # 打通 10.0.0.148 与本地的网络 
 sudo route -n add -host 10.0.0.148  10.8.0.1   
+
+
+
+mkdir -p /opt/frp
+mkdir -p /etc/frp
+wget -O- https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_amd64.tar.gz | tar --strip-components 1 -xzC /opt/frp
+cp /opt/frp/frps /usr/bin/frps
+
+
+# 请替换token
+token=zhang2020#@!
 # 编辑 frps.ini
-cat >> /etc/frp/frps.ini << EOF
+cat > /etc/frp/frps.ini << EOF
 [common]
+bind_addr = 0.0.0.0
 bind_port = 7000
-kcp_bind_port = 7000
-token=xxxxxx # 自行替换
+token=${token}
 EOF
 
-cp systemd/frps.service /lib/systemd/system/frps.service
+cp /opt/frp/systemd/frps.service /lib/systemd/system/frps.service
 # 重新加载配置
 systemctl daemon-reload
 # 启动 frps 开机启动
@@ -45,14 +56,18 @@ journalctl -u frps -f
 ```
 
 192.168.1.122
-```bash
+> 需要控制的机器
 
-cat >> frpc.ini << EOF
+```bash
+token=<请填写token>
+server_addr=10.0.0.148 
+
+cat > frpc.ini << EOF
 [common]
-server_addr = 10.0.0.148
+server_addr = ${server_addr}
 server_port = 7000
-protocol = kcp
-token = xxxxxx # 自行替换
+protocol = tcp
+token=${token}
 
 [vnc]
 type = tcp
@@ -74,8 +89,10 @@ EOF
 # 简单测试 
 # ./frpc -c frpc.ini
 
-mkdir -p /usr/local/bin/frpc/ && cp frpc frpc.ini /usr/local/bin/frpc/
-cat >>  ~/Library/LaunchAgents/frpc.plist << EOF
+mkdir -p /usr/local/bin/frpc/
+wget -O- https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_darwin_amd64.tar.gz | tar --strip-components 1 -xzC /usr/local/bin/frpc
+
+cat >  ~/Library/LaunchAgents/frpc.plist << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC -//Apple Computer//DTD PLIST 1.0//EN
 http://www.apple.com/DTDs/PropertyList-1.0.dtd >
@@ -96,9 +113,14 @@ http://www.apple.com/DTDs/PropertyList-1.0.dtd >
 </dict>
 </plist>
 EOF
+ 
+# 简单测试 
+# /usr/local/bin/frpc/frpc -c /usr/local/bin/frpc/frpc.ini
+
 # 加载并生效
-sudo chown root ~/Library/LaunchAgents/frpc.plist
-sudo launchctl load -w ~/Library/LaunchAgents/frpc.plist
+# sudo chown root ~/Library/LaunchAgents/frpc.plist
+# sudo launchctl load -w ~/Library/LaunchAgents/frpc.plist
+launchctl load -w ~/Library/LaunchAgents/frpc.plist
 
 
 # 二选一
@@ -131,7 +153,6 @@ mac 电脑打开 finder > 前往 > 连接服务器
 
 本地机器 vnc ssh 登录
 ```bash
-
 ssh <用户名>@10.0.0.148 -p 6000
 ```
 
