@@ -1,18 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
+# alter table m_av_channel modify cid varchar(64) not null comment '渠道ID';
+# example: sh pt_dev.sh m_av_channel "modify cid varchar(64) not null comment '渠道ID';"
 
 table=$1
 alter_conment=$2
-​
+
 cnn_host='127.0.0.1'
 cnn_user='user'
 cnn_pwd='password'
 cnn_db='database_name'
-​
+
 echo "$table"
 echo "$alter_conment"
-/root/percona-toolkit-2.2.19/bin/pt-online-schema-change --charset=utf8 --no-version-check --user=${cnn_user} --password=${cnn_pwd} --host=${cnn_host}  P=3306,D=${cnn_db},t=$table --alter 
-"${alter_conment}" --execute
+
+pt-online-schema-change --charset=utf8 --no-version-check --user=${cnn_user} --password=${cnn_pwd} --host=${cnn_host}  P=3306,D=${cnn_db},t=${table} --alter "${alter_conment}" --execute
 
 
 

@@ -7,11 +7,8 @@ wget percona.com/get/percona-toolkit.tar.gz
 tar -zvxf percona-toolkit.tar.gz
 cd percona-toolkit-3.3.1
 # 安装perl依赖
-yum install perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker
-
-# mac 
-brew install perl
-
+# apt install perl-ExtUtils-CBuilder perl-ExtUtils-MakeMaker
+apt-get install libdbd-mysql-perl
 perl Makefile.PL
 
 
@@ -21,6 +18,7 @@ make install
 
 # 验证
 pt-online-schema-change
+
 
 ````
 
