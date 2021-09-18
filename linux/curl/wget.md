@@ -169,9 +169,9 @@ wget -O filename.zip http://xxxxxx
 
 
 # 断点续传
-wget -c http://xxxxxx 
+wget -c https://storage.googleapis.com/kubernetes-release/release/stable.txt
 # 指定目录
-wget -P ./tmp http://xxxxxx
+wget -P ./tmp https://storage.googleapis.com/kubernetes-release/release/stable.txt
 # 限速
 wget -Q 1M http://xxxxxx 
 # 下载目录下面的全部文件
