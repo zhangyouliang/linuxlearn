@@ -3,7 +3,9 @@
 
 trap 命令的语法如下所示：
 
-    trap command signal [ signal ... ]
+````
+trap command signal [ signal ... ]
+````
 
 当 Shell 收到信号 signal(s) 时，command 将被读取和执行。
 
@@ -24,53 +26,92 @@ trap 使用场景:
 案例
 ---
 
-捕获退出码0
+捕获退出码 0
+````bash
+# 捕获退出状态 0
+trap 'echo "Exit 0 signal detected..."' EXIT
+# 打印信息
+echo "This script is used for testing trap command."
 
-    # 捕获退出状态 0
-    trap 'echo "Exit 0 signal detected..."' 0
-    # 打印信息
-    echo "This script is used for testing trap command."
+# 以状态（信号）0 退出此 Shell 脚本
+exit EXIT
+````
 
-    # 以状态（信号）0 退出此 Shell 脚本
-    exit 0
-    ### 输出
-    This script is used for testing trap command.
-    Exit 0 signal detected...
+输出:
+````
+This script is used for testing trap command.
+Exit 0 signal detected...
+````
 
     
 捕获信号 SIGINT，然后打印相应的信息
 
-    trap "echo 'You hit Ctrl + C! I am ignoring you.'" SIGINT
+````bash
+trap "echo 'You hit Ctrl + C! I am ignoring you.'" SIGINT
 
-    # 捕获信号 SIGTERM，然后打印相应信息
-    trap "echo 'You tried to kill me! I am ignoring you.'" SIGTERM
+# 捕获信号 SIGTERM，然后打印相应信息
+trap "echo 'You tried to kill me! I am ignoring you.'" SIGTERM
 
-    # 循环 5 次
-    for i in {1..5}; do
-        echo "Iteration $i of 5"
-        sleep 5
-    done
+# 循环 5 次
+for i in {1..5}; do
+    echo "Iteration $i of 5"
+    sleep 5
+done
+
+````
+
+
+````bash
+# 在其他窗口执行  kill -s TERM  `ps -A | grep test.sh | grep -v grep  | awk '{print $1}'`
+# 脚本这边直接 Ctrl + C
+````
+
+DEBUG : 脚本每条命令执行的时候 都会触发一次
+
+````bash
+trap  "echo '脚本调试'$?" DEBUG
+echo ming1
+echo ming2
+echo ming3
+echo ming4
+```` 
+
+ERR : 脚本执行异常的时候 触发
+````bash
+trap "echo '脚本执行异常'" ERR
+top  sssx 2>/dev/null
+````
+
+当存在函数返回或者source 执行其他脚本的时候 触发
+
+````bash
+trap "echo '函数返回或者source执行其他脚本'" RETURN
+source ~/.bash_profile
+````
+ 
 
 脚本退出时,执行清理操作
 
-    trap 'my_exit; exit' SIGINT SIGQUIT
-    # 用户调用 kill -1 PID 命令
-    trap 'echo Going down on a SIGHUP - signal 1, no exiting...; exit' SIGHUP
-    count=0
-    tmp_file=`mktemp /tmp/file.$$.XXXXXX`
-    my_exit()
-    {
-            echo "You hit Ctrl-C/Ctrl-\, now exiting..."
-            rm -f $tmp_file >& /dev/null
-    }
-    echo "Do something..." > $tmp_file
-    # 执行无限循环
-    while :
-    do
-        sleep 1
-        count=$(expr $count + 1)
-        echo $count
-    done
+````bash
+trap 'my_exit; exit' SIGINT SIGQUIT
+# 用户调用 kill -1 PID 命令
+trap 'echo Going down on a SIGHUP - signal 1, no exiting...; exit' SIGHUP
+count=0
+tmp_file=`mktemp /tmp/file.$$.XXXXXX`
+my_exit()
+{
+        echo "You hit Ctrl-C/Ctrl-\, now exiting..."
+        rm -f $tmp_file >& /dev/null
+}
+echo "Do something..." > $tmp_file
+# 执行无限循环
+while :
+do
+    sleep 1
+    count=$(expr $count + 1)
+    echo $count
+done
+````
 
 
 

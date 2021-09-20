@@ -22,7 +22,7 @@ echo ${indices[@]} # 数组全部元素
 echo ${indices[*]} # 数组全部元素
 echo ${#indices[@]} # 数组长度
 echo ${indices[@]:1:2} # 数组分片访问
-unset indices[1] # 删除下标为1的元素
+unset ${indices[1]} # 删除下标为1的元素
 echo ${indices[@]} # 数组全部元素
 echo ${!indices[@]} # 获取全部下标
 echo '## 数组遍历'

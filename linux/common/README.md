@@ -1,10 +1,10 @@
-#### 特殊变量
+#### # 特殊变量
 
 * $0 当前脚本文件
 * $n 传递给脚本或函数的参数,n 代表是一个数字,表示第几个参数.例如，第一个参数是$1，第二个参数是$2。
 * $# 传递给脚本或函数的参数个数
-* $@ 传递给脚本或函数的所有参数(分别表示)
-* $* 传递给脚本或函数的所有参数,必须被 "" 引用 (作为一个单词)
+* $@ 传递给脚本或函数的所有参数
+* $* 传递给脚本或函数的所有参数,(当使用双引号括起来时,表示一个单词,其他情况和 $@ 一样)
 * $$ 当前 shell 进程ID
 * $! 在后台运行的最后的工作的PID
 * $? 上一个命令退出状态.或者函数的返回值
@@ -13,11 +13,12 @@
 
 * 当前函数的名字 $FUNCNAME
 * 当前行号 $LINENO
+* BASH_SOURCE[0] 当前脚本文件
 
 #### # sh 妙用
 
 ````
-# 将 sh -s 非 -,后面的全部参数,赋值给前面脚本,分别为 $1,$2,$3.....
+# 将 sh -s --,后面的全部参数,赋值给前面脚本,分别为 $1,$2,$3.....
 curl -fsSL https://raw.githubusercontent.com/zhangyouliang/dockerfile/master/tags.sh | sh -s -- nginx
 
 # 校验
@@ -26,7 +27,7 @@ echo 'echo $@' | sh -s -- 1 2 3 4 5 6
 
 ````
 
-#### IFS
+#### # IFS
 > Linux下有一个特殊的环境变量叫做IFS，叫做内部字段分隔符
 > 默认情况下，bash shell会将下面的字符当做字段分隔符：空格、制表符、换行符。
 
@@ -38,7 +39,7 @@ declare -p test # declare -a test=([0]="1" [1]="2" [2]="3" [3]="4" [4]="5" [5]="
 ```
 
 
-#### 变量间接引用
+#### #  变量间接引用
 
 ```bash
 # a 变量的值是 b 变量的名字
@@ -58,7 +59,7 @@ echo $lastarg
 
 
 
-#### 变量替换
+#### #  变量替换
 
 > https://www.cnblogs.com/gaochsh/p/6901809.html
 
@@ -78,7 +79,7 @@ echo $lastarg
 
 ![image](./img/20150620201642326.png)
 
-#### Shell中的${}、##和%%使用范例
+#### #  Shell中的${}、##和%%使用范例
 
 * ${file#pattern}
 * ${file%pattern}
@@ -90,7 +91,7 @@ echo $lastarg
 
 记忆方法
 
-* # 是 去掉左边（键盘上#在 $ 的左边）
+* `# 是 去掉左边（键盘上#在 $ 的左边）`
 * %是去掉右边（键盘上% 在$ 的右边）
 * 单一符号是最小匹配；两个符号是最大匹配
 * ${file:0:5}：提取最左边的 5 个字节：/dir1
@@ -110,19 +111,18 @@ echo ${str%/*}
 echo ${str%%/*}
 ```
 
-###########
 参考地址: [Bash Reference Manual](http://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#What-is-Bash_003f)
 
-#### $() 与 ``
+#### #  $() 与 ``
 
 在 bash shell 中 $() 与`` 都是用来做命令替换用的
 
 * ${} 用来做变量的替换 
 * $(()) 可以做一些运算,抛弃 expr 等操作
 
-#### (),(()),[],[[]],{},$(),$(()) 区别
+#### #  (),(()),[],[[]],{},$(),$(()) 区别
 
-**$()和 ` `**
+##### # $()和 \`\`
 > 命令替换
 
 - $() 并不是所有shell都支持, `` 几乎都支持,但是容易看错
@@ -132,7 +132,7 @@ echo `uname -a`
 echo $(uname -a)
 ```
 
-**${ }**
+##### # ${ }
 
 - `${ }`用于变量替换。一般情况下，`$var` 与 `${var}` 并没有什么不一样，但是用 `${ }` 会比较精确的界定变量名称的范围。
 
@@ -141,7 +141,7 @@ name=abc
 echo "name: ${name}"
 ```
 
-**$[] $(())**
+##### # $[] $(())
 > 主要数学运算
 > If the value of the expression is non-zero, the return status is 0; otherwise the return status is 1
 
@@ -162,7 +162,7 @@ echo $a
 ```
 
 
-**()**
+##### # ()
 > 主要处理数学,数组,子进程
 
 - 命令组。括号中的命令将会新开一个子shell顺序执行，所以括号中的变量不能够被脚本余下的部分使用。括号中多个命令之间用分号隔开，最后一个命令可以没有分号，各命令和括号之间不必有空格。
@@ -184,7 +184,7 @@ done
 ps -ef | grep curl
 ```
 
-**(())**
+##### # (())
 > 主要针对数学处理
 
 * 数学运算: + - * / % (bash只能作整数运算，对于浮点数是当作字符串处理的)
@@ -210,7 +210,7 @@ fi
 ```
 
 
-**[[]]**
+##### # [[]]
 > [] 的加强版
 
 - bash把双中括号中的表达式看作一个单独的元素，并返回一个退出状态码。
@@ -250,11 +250,12 @@ if [[ 1!=2 && 1=2  ]];then echo 1; fi
 # 正确
 if [[ 1 != 2 && 1 = 1  ]];then echo 1; fi
 
-# 逻辑真 (regex matching)  
+# 逻辑真 (regex matching) 
+# 只有 [[]] 支持 =~ , 右边的当做正则表达式
 if [[ "a.txt" =~ .*\.txt ]];then echo true; else echo false ; fi
 # output:true
 ````
-####  test 或者 []
+#### # test 或者 []
 > 只有两个结果: true,false(0,1)
 
 * 数字测试: -eq, -ne, -gt, -ge, -lt, -le
@@ -283,7 +284,7 @@ echo "result 为： $result"
 
 ```
 
-#### 算数运算符
+#### # 算数运算符
 ```shell script
 # if test
 var1=1
@@ -296,7 +297,7 @@ if [ $var1 == 1 -a $var2 == 2 ]; then
     echo "equal"
 fi
 ```
-#### 字符串比较
+#### # 字符串比较
 
 * =      等于,如:if [ "$a" = "$b" ]
 * ==     等于,如:if [ "$a" == "$b" ],与=等价
@@ -305,7 +306,7 @@ fi
 * -z 字符串为 "",返回 true
 * -n 字符串不为 "", -n 在 [] 结构内测试,必须用 `""` 将变量引起来.(习惯:使用`""`包裹变量)
 
-#### 文件比较运算符
+#### # 文件比较运算符
 
 * -e filename 如果存在,则为真
 * -d filename 如果为目录,则为真
@@ -318,19 +319,25 @@ fi
 * filename1 -ot filename2 如果 filename1 比 filename2 旧，则为真
 
 
-![image](./images/7701_200706181431421.gif)
-
 **总结:**
 
 算数运算:
+> 只能整数
 
 * $[]
 * $(())
+* let
+* expr 
 
-逻辑运算:
+逻辑运算 - 数字:
+
+* (())
+
+逻辑运算 - 数字 - 字符串:
 
 * [[]]
 * []
+* test
 
 数组:
 
@@ -345,7 +352,64 @@ fi
 * ``
 * $()
 
-#### RANDOM 生成随机数字
+
+
+#### #  shell 进行算数运算
+
+- expr  只能整数
+- $(()) 只能整数
+- $[] 只能整数
+- let 只能整数
+
+````
+echo `expr 100 + 10`
+echo $((100 + 10))
+echo $[10+1]
+echo `let z=100+1`
+````
+
+除数保留小数点
+
+```shell script
+# 由于 expr 不支持浮点除法,所以这里借助 bc 工具
+echo "scale=2;10.1/2" | bc
+# 或者借助 awk
+awk 'BEGIN{printf "%.2f\n",10.1/2}'
+# printf 
+printf "%.2f" 10.1/2
+```
+
+#### #  expr
+> 主要用于 算数运算, 字符串截取,字符串匹配之类的
+
+```shell script
+expr --help
+    match STRING REGEXP        same as STRING : REGEXP
+    substr STRING POS LENGTH   substring of STRING, POS counted from 1
+    index STRING CHARS         index in STRING where any CHARS is found, or 0
+    length STRING              length of STRING
+```
+
+例子:
+
+```shell script
+### 字符串截取
+str=abc1212abc 
+echo ${str:0:4} 
+# 或者
+expr ${str:0:4} 
+expr index "$str" "abc"
+# output: 1
+expr length "$str"   
+# output: 10
+expr substr $str 1 4 
+# output: abc1
+expr match $str '\([a-z]*\)'
+# output: abc
+```
+
+
+#### # RANDOM 生成随机数字
 
 ```shell script
 # Well, seeing how this //is// BASH-hackers.org I kinda missed the bash way of doing the above ;-) 
@@ -353,32 +417,42 @@ fi
 printf $((  500 *  RANDOM  / 32767   ))
 
 # Or print 30 random  numbers between 0 and 10 ;)
-X=0; while (( X++ < 30 )); do echo $((  10 *  RANDOM  / 32767   )); done
+X=0; while (( X++ < 30 )); do echo -n $(( 10 * RANDOM / 32767 ))" "; done
 
-####  -EOF 和<<EOF 区别?
 
-cat <<EOF
-    If you would like to use Docker as a non-root user
-EOF
-## EOF 前面有个制表符, -EOF 容错率更高
-cat <<-EOF
-    If you would like to use Docker as a non-root user
-EOF
 ```
 
-#### 数组
+#### #  数组
 
 ```shell script
-array_name=(value0 value1 value2 value3)
+indices=(value0 value1 value2 value3)
 
-# 循环 ${array_name[@]} or ${array_name[*]}
-for i in ${array_name[@]}; do
-    echo $i
+# 声明为数组
+declare -a indices
+echo ${indices[@]} # 数组全部元素
+echo ${indices[*]} # 数组全部元素
+echo ${#indices[@]} # 数组长度
+echo ${indices[@]:1:2} # 数组分片访问
+unset ${indices[1]} # 删除下标为1的元素
+echo ${indices[@]} # 数组全部元素
+echo ${!indices[@]} # 获取全部下标
+
+
+# 循环 ${indices[@]} or ${indices[*]}
+
+# 为啥加双引号,不存在空格时 @ 和 * 都没问题
+# 一旦出现空格,将导致不可预料的问题
+for i in "${indices[@]}";do
+    echo ${i}
 done
-# 长度
-echo ${#array_name[@]}
+
+echo '## 数组遍历 - 元素带有空格,且不使用 " 包裹数组,循环'
+for i in ${indices[@]};do
+    echo ${i}
+done
+
 ```
-#### 格式话输出
+#### #  格式化输出
 
 
 ```shell script
@@ -387,7 +461,7 @@ printf "%d %s \n" 1 "abc"
 printf "%032x\n" 9000
 ```
 
-#### for
+#### #  for
 ```shell script
 echo '-----1..100-----'
 for loop in {1..100}; do
@@ -403,14 +477,14 @@ for ((i = 1; i <= 100; i++)); do
 done
 ````
 
-#### 文件解压
+#### #  文件解压
 
 ```shell script
 # 解压文件去除第一层文件夹  (--strip-path 或者 --strip-components )
 tar zxvf test.tar.gz --strip-components 1 -C web
 ````
 
-#### 输入输出流
+#### #  输入输出流
 
     #0:表示键盘输入(stdin)
     #1:表示标准输出(stdout),系统默认是1
@@ -430,17 +504,17 @@ tar zxvf test.tar.gz --strip-components 1 -C web
     #1>/dev/null:表示标准输出重定向到空设备文件,也就是不输出任何信息到终端,不显示任何信息。
     #2>&1:表示标准错误输出重定向等同于标准输出,因为之前标准输出已经重定向到了空设备文件,所以标准错误输出也重定向到空设备文件。
 
-#### 其他
+#### #  其他
 
 * shift 销毁一个参数，后面的参数前移
 
 
-#### 相关命令
+#### #  相关命令
 
     tr 从标准输入设备读取数据，经过字符串转译后，将结果输出到标准输出设备(配合 sed 命令)
 
 
-#### Bash 的错误处理
+#### #  Bash 的错误处理
 
     # 写法一
     command xxx || { echo 'command failed'; exit 1;}
@@ -453,7 +527,7 @@ tar zxvf test.tar.gz --strip-components 1 -C web
     # 如果两个命令有继承关系，只有第一个命令成功了，才能继续执行第二个命令，那么就要采用下面的写法。
     command1 && command2 
 
-#### set 
+#### #  set 
 
 * -a 标示已修改的变量，以供输出至环境变量。
 * -x：执行指令后，会先显示该指令及所下的参数。
@@ -491,7 +565,7 @@ set -o pipefail
 ```
 $ bash -euxo pipefail script.sh
 ```
-#### eval
+#### #  eval
 
 > $($n): eval  把$n 当作一个shell命令。
  
@@ -513,7 +587,7 @@ one
 
 
 
-##### 函数返回值
+#### #  函数返回值
 
 > 函数默认是将标准输出传递出来，不是返回值
 
@@ -563,7 +637,7 @@ EXPECTED_NUM_NODES=$?
 echo $EXPECTED_NUM_NODES
 ```
 
-#### 背景颜色
+#### #  背景颜色
 ```shell script
 color_norm="\033[0m"
 color_black="\033[30m"
@@ -578,7 +652,7 @@ color_white="\033[37m"
 echo -e "${color_red} Failed to get nodes.${color_norm}"
 ```
 
-#### declare
+#### #  declare
 
 * -r 只读
     declare -r var1
@@ -631,7 +705,7 @@ decleae -f # 列出上面的函数
 ``` 
         
 
-#### 压缩相关命令
+#### #  压缩相关命令
 
 * tar
     * 解包: tar zxvf xxx.tar
@@ -652,7 +726,7 @@ decleae -f # 列出上面的函数
     解压2：bunzip2 filename.bz
         .tar.bz
 
-#### 信号 和 Traps
+#### #  信号 和 Traps
 
 ```shell script
 # test trap command
@@ -670,7 +744,7 @@ done
 
 echo The end.
 ```
-#### 数据类型判断
+#### #  数据类型判断
 
 ```shell script
 ## 类型判断
@@ -686,7 +760,7 @@ function check(){
 # usage
 echo $(check 'name')
 ```
-##### awk  结合 for 循环
+#### #  awk  结合 for 循环
 
 ```shell script
 ips=$(cat ~/.ssh/config | grep 'HostName' | awk '{print $2}')
@@ -694,7 +768,7 @@ for i in `echo $ips`;do
         ssh-copy-id -i ~/.ssh/id_rsa.pub $i
 done
 ```
-##### Check for a Command in PATH
+#### #  Check for a Command in PATH
 ```shell script
 # which,hash,command
 # if which ls >/dev/null 2>&1; then
@@ -704,8 +778,7 @@ if hash ls >/dev/null 2>&1; then
 fi
 ```
 
-调试
-=====
+#### # 调试
 > [参考](https://wiki.bash-hackers.org/scripting/debuggingtips)
 
 - 调试信息可以使用 `logger` 写入到系统日志里面
@@ -771,7 +844,7 @@ get current.log
 dele current.log
 FTP
 ```
-##### 正则表达式
+#### #  正则表达式
 
 > [参考: hell常用正则表达式](https://www.cnblogs.com/linuxws/p/6942574.html)
     
@@ -801,70 +874,69 @@ FTP
 - sed 替换命令
 
 
+#### #  EOF 的使用
 
+```bash
+# 原样输出, $ 不会被替换
+cat > /tmp/test <<\EOF
+$PATH
+EOF
 
-
-
-
-##### shell 进行算数运算
-
-- expr  只能整数
-- $(()) 只能整数
-- $[] 只能整数
-- let 只能整数
-
-
-* expr
-  * echo `expr 100 + 10`
-* $(())
-  * echo $((100 + 10))
-* $[]
-  * echo $[10+1]
-* let
-  * let z=100+1
-
-
-除数保留小数点
-
-```shell script
-# 由于 expr 不支持浮点除法,所以这里借助 bc 工具
-echo "scale=2;10.1/2" | bc
-# 或者借助 awk
-awk 'BEGIN{printf "%.2f\n",10.1/2}'
-
-```
-
-##### expr
-```shell script
-expr --help
-    match STRING REGEXP        same as STRING : REGEXP
-    substr STRING POS LENGTH   substring of STRING, POS counted from 1
-    index STRING CHARS         index in STRING where any CHARS is found, or 0
-    length STRING              length of STRING
-```
-
-例子:
-
-```shell script
-### 字符串截取
-str=abc1212abc 
-echo ${str:0:4} 
 # 或者
-expr ${str:0:4} 
-expr index "$str" "abc"
-# output: 1
-expr length "$str"   
-# output: 10
-expr substr $str 1 4 
-# output: abc1
-expr match $str '\([a-z]*\)'
-# output: abc
+cat > /tmp/test <<"EOF"
+$PATH
+EOF
+
+
+cat <<"EOF" > /tmp/test
+$PATH
+EOF
+
+```
+
+#### #  -EOF 和<<EOF 区别?
+````bash
+cat <<EOF
+    If you would like to use Docker as a non-root user
+EOF
+````
+#### #  EOF 前面有个制表符, -EOF 容错率更高
+````bash
+cat <<-EOF
+    If you would like to use Docker as a non-root user
+EOF
+````
+
+#### #  sh <<<, <<, < <()
+
+```
+# <<< 含义是here-string，表示传给给cmd的stdin的内容从这里开始是一个字符串。
+# 把字符串"aaa"传递给cmd作为其stdin的内容
+cat <<<"aaa
+
+# 含义是here-document，表示传给给cmd的stdin的内容从这里开始是一个文档，内容碰到EOF为截止。
+cat -<<EOF     
+$PATH
+EOF
+
+cat <<EOF     
+$PATH
+EOF
+
+cat <<"EOF"   
+$PATH
+EOF
+
+# < <()
+# <(cmd2): 把cmd2的输出写入一个临时文件
+# cmd1 < : 这是一个标准的stdin重定向。
+cat < <(echo 12345)
+# 可见<(echo 12345)的输出就是文件 /dev/fd/11
+echo <(echo "12345")
+
 ```
 
 
-##### 脚本专有变量
-
-* BASH_SOURCE[0] 当前脚本文件
  
 参考
 ====
