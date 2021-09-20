@@ -1,13 +1,6 @@
 mysql 管理工具
 =====
 
-### # 工具列表
-
-- mycli mysql 提示命令行
-- mytop mysql 性能查看工具
-- gh-ost mysql ddl 修改工具 [下载](https://github.com/github/gh-ost/releases)
-- pt-online-schema-change mysql ddl 修改工具 [下载](percona.com/get/percona-toolkit.tar.gz)
-
 ### # 常用命令
 
 查看并且杀死查询锁死的sql
@@ -172,11 +165,30 @@ show engine innodb status
 -- 查看表锁的情况
 show status like 'table%';
 
+-- 查看 mysql 线程情况
+show status like '%Threads%';
+
+- Threads_connected：当前线程连接个数
+- Threads_running： 当前进程运行个数
+- Threads_cached：已经被线程缓存池缓存的线程个数
+- Threads_created：表示创建过的线程数，如果发现Threads_created值过大的话，表明MySQL服务
+
 -- 查看InnoDB_row_lock状态变量来分析系统上的行锁的争夺情况
 show status like 'InnoDB_row_lock%';
 ````
+
+
+### # 工具列表
+
+- mycli mysql 提示命令行
+- mytop mysql 性能查看工具
+- gh-ost mysql ddl 修改工具 [下载](https://github.com/github/gh-ost/releases)
+- pt-online-schema-change mysql ddl 修改工具 [下载](percona.com/get/percona-toolkit.tar.gz)
+
+
 
 ### # 参考
 
 - [gh-ost：在线DDL修改MySQL表结构工具](https://zhang.ge/5133.html)
 - [MySQL在线DDL修改表结构的简单经验分享](https://zhang.ge/5134.html)
+- [数据库内核月报](https://www.bookstack.cn/read/aliyun-rds-core/5ca01cbcd0ad309e.md)
