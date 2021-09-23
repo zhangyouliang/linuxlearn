@@ -29,32 +29,25 @@ ulimit 用于限制 shell 启动进程所占用的资源，支持以下各种类
     -v <虚拟内存大小>：指定可使用的虚拟内存上限，单位为KB。
 实例
 ---
-    # ulimit -a
-    core file size          (blocks, -c) 0           #core文件的最大值为100 blocks。
-    data seg size           (kbytes, -d) unlimited   #进程的数据段可以任意大。
-    scheduling priority             (-e) 0
-    file size               (blocks, -f) unlimited   #文件可以任意大。
-    pending signals                 (-i) 98304       #最多有98304个待处理的信号。
-    max locked memory       (kbytes, -l) 32          #一个任务锁住的物理内存的最大值为32KB。
-    max memory size         (kbytes, -m) unlimited   #一个任务的常驻物理内存的最大值。
-    open files                      (-n) 1024        #一个任务最多可以同时打开1024的文件。
-    pipe size            (512 bytes, -p) 8           #管道的最大空间为4096字节。
-    POSIX message queues     (bytes, -q) 819200      #POSIX的消息队列的最大值为819200字节。
-    real-time priority              (-r) 0
-    stack size              (kbytes, -s) 10240       #进程的栈的最大值为10240字节。
-    cpu time               (seconds, -t) unlimited   #进程使用的CPU时间。
-    max user processes              (-u) 98304       #当前用户同时打开的进程（包括线程）的最大个数为98304。
-    virtual memory          (kbytes, -v) unlimited   #没有限制进程的最大地址空间。
-    file locks                      (-x) unlimited   #所能锁住的文件的最大个数没有限制。
-
-
-操作
----
-
-    # 第一个参数目前系统分配的数量,第二个参数最大分配数量
-    cat  /proc/sys/fs/file-nr
-    # Linux系统最多允许同时打开(即包含所有用户打开文件数总和)800037个文件，是Linux系统级硬限制，所有用户级的打开文件数限制都不应超过这个数值。该值是Linux系统在启动时根据系统硬件资源状况计算出来的最佳的最大同时打开文件数限制，如果没有特殊需要，不应该修改此限制，除非想为用户级打开文件数限制设置超过此限制的值。
-    cat /proc/sys/fs/file-max
+````
+# ulimit -a
+core file size          (blocks, -c) 0           #core文件的最大值为100 blocks。
+data seg size           (kbytes, -d) unlimited   #进程的数据段可以任意大。
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited   #文件可以任意大。
+pending signals                 (-i) 98304       #最多有98304个待处理的信号。
+max locked memory       (kbytes, -l) 32          #一个任务锁住的物理内存的最大值为32KB。
+max memory size         (kbytes, -m) unlimited   #一个任务的常驻物理内存的最大值。
+open files                      (-n) 1024        #一个任务最多可以同时打开1024的文件。
+pipe size            (512 bytes, -p) 8           #管道的最大空间为4096字节。
+POSIX message queues     (bytes, -q) 819200      #POSIX的消息队列的最大值为819200字节。
+real-time priority              (-r) 0
+stack size              (kbytes, -s) 10240       #进程的栈的最大值为10240字节。
+cpu time               (seconds, -t) unlimited   #进程使用的CPU时间。
+max user processes              (-u) 98304       #当前用户同时打开的进程（包括线程）的最大个数为98304。
+virtual memory          (kbytes, -v) unlimited   #没有限制进程的最大地址空间。
+file locks                      (-x) unlimited   #所能锁住的文件的最大个数没有限制。
+````
 
 ulimit -n VS file-max
 ----
@@ -63,13 +56,44 @@ ulimit -n VS file-max
 - max-file 表示系统级别的能够打开的文件句柄的数量
 
 `ulimit -n` 的设置在重启机器后会丢失，因此需要修改`limits.conf`的限制，limits.conf中有两个值`soft`和 `hard` ，soft代表只警告，hard代表真正的限制
-
-    cat /etc/security/limits.conf
-
+````
+cat /etc/security/limits.conf
+````
 max-file 查看
 
-    sysctl -a |grep fs.file-max
-    # 设置
-    echo "fs.file-max = 2005920" >> /etc/sysctl.conf  
-    sysctl -p  
-    cat /proc/sys/fs/file-max 
+````
+sysctl -a |grep fs.file-max
+# 设置
+echo "fs.file-max = 2005920" >> /etc/sysctl.conf  
+sysctl -p  
+cat /proc/sys/fs/file-max
+```` 
+
+
+其他
+---
+
+````
+# Linux系统最多允许同时打开(即包含所有用户打开文件数总和)800037个文件，是Linux系统级硬限制，所有用户级的打开文件数限制都不应超过这个数值。
+# 该值是Linux系统在启动时根据系统硬件资源状况计算出来的最佳的最大同时打开文件数限制，如果没有特殊需要，不应该修改此限制，除非想为用户级打开文件数限制设置超过此限制的值。
+# sysctl -a |grep fs.file-max
+> cat /proc/sys/fs/file-max
+
+# 单个进程最大打开的文件数
+# sysctl -a |grep nr_open
+> cat /proc/sys/fs/nr_open
+
+# 查看当前系统已经打开的文件数量
+# 其中第一个数表示当前系统已分配使用的打开文件描述符数，第二个数为分配后已释放的（目前已不再使用），第三个数等于file-max
+# sysctl -a |grep file-nr
+> cat  /proc/sys/fs/file-nr
+# 已经分配了 5696, 总共 1000000
+5696	0	1000000
+````
+
+总结:
+
+- 所有进程打开文件描述符不能超过  /proc/sys/fs/file-max
+- 单个进程打开的文件描述符不能超过 user limit中 nofile的 soft limit
+- nofile 的 soft limit 不能超过其他 hard limit
+- nofile 的 hard limit 不能超过 /proc/sys/fs/nr_open

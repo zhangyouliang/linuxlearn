@@ -4,7 +4,9 @@
 
 参数
 
-    -p[FILE], --load[=FILE] 指定加载的文件,默认为/etc/sysctl.conf
-    --system 加载全部的系统文件
+````
+-p[FILE], --load[=FILE] 指定加载的文件,默认为/etc/sysctl.conf
+--system 加载全部的系统文件
+````
 
 
