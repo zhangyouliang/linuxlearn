@@ -1,5 +1,3 @@
-> linux inode 节点先关只是
-
 > [参考:阮一峰网络日志-理解inode](http://www.ruanyifeng.com/blog/2011/12/inode.html)
 
 inode 基本信息
