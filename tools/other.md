@@ -1,6 +1,5 @@
 
-娱乐工具
-===
+### 娱乐工具
 > 参考: https://www.geeksforgeeks.org/fun-commands-linux/
 
     apt install cowsay
