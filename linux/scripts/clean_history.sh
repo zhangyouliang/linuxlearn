@@ -31,7 +31,7 @@ for i in "${filePath[@]}";do
 done
 
 #
-ip='10.1.171.70'
+ip='101.224.58.210'
 # 清除用户最后一次登录时间
 sed  -i "/$ip/"d /var/log/lastlog
 # 清除登录系统成功的记录
