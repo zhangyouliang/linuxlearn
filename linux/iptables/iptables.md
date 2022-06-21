@@ -73,11 +73,11 @@
     # 查看当前内存中iptables策略，默认是filter表  
     iptables -L  --line-numbers
     # 显示
-    iptables -nvL –line-number
+    iptables -nvL --line-numbers
     -L 查看当前表的所有规则，默认查看的是filter表，如果要查看NAT表，可以加上-t NAT参数
     -n 不对ip地址进行反查，加上这个参数显示速度会快很多
     -v 输出详细信息，包含通过该规则的数据包数量，总字节数及相应的网络接口
-    –line-number 显示规则的序列号，这个参数在删除或修改规则时会用到
+    --line-numbers 显示规则的序列号，这个参数在删除或修改规则时会用到
 
     # 表的每条链后面都有一个默认动作，Chain INPUT (policy ACCEPT)
     # !!! 注意:以下命令将导致,您无法连接服务器
