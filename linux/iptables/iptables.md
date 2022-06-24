@@ -32,6 +32,30 @@
 
 ![image](./images/2fe617bf589da094e04fbfe059bba857.png)
 
+````
+iptables [-t 表] -命令 匹配   操作
+````
+![image](./images/8889505-a9860de36dca3d56.webp)
+
+
+-A是append命令，添加的规则在最后
+
+-D是删除命令，删除第几条规则
+
+-I是插入命令，添加的规则在第一条
+
+![image](./images/8889505-183226905f9500fb.webp)
+
+
+！是取反操作
+
+Sport 是源端口
+
+Dport 是目的端口
+
+
+
+
 参数
 ---
 
@@ -66,11 +90,32 @@
     DROP：丢弃数据包，且不返回任何信息
     REJECT：丢弃数据包，但是会返回拒绝的信息
     LOG：把通过的数据包写到日志中（相当于一个门卫对进去的人进行登记）
+    MASQUERADE：改写封包来源IP为防火墙的IP，可以指定port 对应的范围，进行完此处理动作后，直接跳往下一个规则链（mangle:postrouting）。
+    这个功能与 SNAT 略有不同，当进行IP 伪装时，不需指定要伪装成哪个 IP，IP 会从网卡直接读取，当使用拨接连线时，IP 通常是由 ISP 公司的 
+    DHCP服务器指派的，这个时候 MASQUERADE 特别有用。范例如下：
+        iptables -t nat -A POSTROUTING -p TCP -j MASQUERADE --to-ports 21000-31000
+    SNAT：改写封包来源 IP 为某特定 IP 或 IP 范围，可以指定 port 对应的范围，进行完此处理动作后，将直接跳往下一个规则炼（mangle:postrouting）。
+    范例如下：
+        iptables -t nat -A POSTROUTING -p tcp-o eth0 -j SNAT --to-source 192.168.10.15-192.168.10.160:2100-3200
+
+    DNAT：改写数据包包目的地 IP 为某特定 IP 或 IP 范围，可以指定 port 对应的范围，进行完此处理动作后，将会直接跳往下一个规则链（filter:input 或 filter:forward）。范例如下：
+        iptables -t nat -A PREROUTING -p tcp -d 15.45.23.67 --dport 80 -j DNAT --to-destination 192.168.10.1-192.168.10.10:80-100
+    MIRROR：镜像数据包，也就是将来源 IP与目的地IP对调后，将数据包返回，进行完此处理动作后，将会中断过滤程序。
+    QUEUE： 中断过滤程序，将封包放入队列，交给其它程序处理。透过自行开发的处理程序，可以进行其它应用，例如：计算联机费用.......等
+    RETURN： 结束在目前规则链中的过滤程序，返回主规则链继续过滤，如果把自订规则炼看成是一个子程序，那么这个动作，就相当于提早结束子程序并返回到主程序中
+    MARK： 将封包标上某个代号，以便提供作为后续过滤的条件判断依据，进行完此处理动作后，将会继续比对其它规则
 
 
 
 常用操作
 ---
+
+    列出各个表的规则命令：
+    iptables -nvL
+    iptables -t nat -nvL
+    iptables -t mangle -nvL
+    iptables -t raw -nvL
+    iptables -t filter -nvL
 
     # 查看当前内存中iptables策略，默认是filter表  
     iptables -L  --line-numbers
@@ -117,6 +162,8 @@
     除此之外，还需要允许连接到422端口的请求
     iptables -A INPUT -i eth0 -p tcp --dport 422 -m state --state NEW,ESTABLISHED -j ACCEPT
     iptables -A OUTPUT -o eth0 -p tcp --sport 422 -m state --state ESTABLISHED -j ACCEPT
+
+
 实例
 ----
 
@@ -137,7 +184,16 @@
     EOF
     
     chmod a+x /etc/network/if-pre-up.d/up_iptables.sh
-    
+
+
+其他技巧
+----
+
+````
+# 可以测试数据请求的走向
+tcpdump -i docker0 -AAl src 60.28.215.123 or dst 60.28.215.123
+````
+
 
 
 参考
@@ -147,3 +203,4 @@
 - [IBM:netfilter/iptables 简介](https://www.ibm.com/developerworks/cn/linux/network/s-netip/index.html)
 - [linux系统中查看己设置iptables规则](https://blog.csdn.net/chengxuyuanyonghu/article/details/51897666)
 - [[译] 深入理解 iptables 和 netfilter 架构](https://arthurchiao.github.io/blog/deep-dive-into-iptables-and-netfilter-arch-zh/)
+- [iptables 详解](https://www.jianshu.com/p/ebd8f1c26d53)
