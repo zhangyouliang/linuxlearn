@@ -12,6 +12,50 @@
     LISTEN     0      128                                  *:22                                               *:* 
     LISTEN     0      1                            127.0.0.1:32000                                            *:*    
 
+一台机器最多能创建多少个 TCP 连接？
+=====
+
+本地端口范围
+
+````bash
+cat /proc/sys/net/ipv4/ip_local_port_range
+32768	60999
+````
+如何修改
+
+````
+vim /etc/sysctl.conf
+# 增加(限制端口只能使用10个啦)
+net.ipv4.ip_local_port_range = 60000 60009
+# 生效
+sysctl -p /etc/sysctl.conf
+````
+建立一个 TCP 连接，需要将通信两端的套接字（socket）进行绑定，如下：
+
+> 源 IP 地址：源端口号 <---->  目标 IP 地址：目标端口号
+
+只要这套绑定关系构成的四元组不重复即可，刚刚端口号不够用了，是因为我一直对同一个目标IP和端口建立连接。所以说最多只能创建 65535 个TCP连接是多么荒唐。
+
+***文件描述符***
+
+系统级：当前系统可打开的最大数量，通过 `cat /proc/sys/fs/file-max` 查看
+
+用户级：指定用户可打开的最大数量，通过 `cat /etc/security/limits.conf` 查看
+
+进程级：单个进程可打开的最大数量，通过 `cat /proc/sys/fs/nr_open` 查看
+
+
+***总结***
+
+影响因素:
+
+- 进程\线程数 ulimit -n
+- 文件描述符 fs.file-max
+- 内存
+- CPU
+- 临时端口号 ip_local_port_range
+
+
 
 
 TCP 半连接队列和全连接队列满了会发生什么？又该如何应对？
