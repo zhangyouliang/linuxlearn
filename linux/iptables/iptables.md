@@ -83,6 +83,7 @@ Dport 是目的端口
     -s  ip   源ip
     -d  ip    目的ip
     -p  协议
+    -m  module name
     --dport  端口号   目的端口号
     --sport   端口号   源端口号
     动作:
@@ -139,6 +140,11 @@ Dport 是目的端口
     iptables -t filter -A INPUT -j LOGGING  #把经过 INPUT 链的数据引入到 LOGGING 这个链上  
     iptables -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IPTables Packet Dropped: " --log-level 7 # 为这些包自定义个前缀，命名为"IPTables Packet Dropped"
     iptables -X LOGGING  # 删除 LOGGING 这条链  
+    # tail -f  /var/log/syslog
+    # 清理自定义的链
+    # 删除 LOGGING 在 INPUT 的引用
+    # iptables -F LOGGING
+    # iptables -X LOGGING
 
 
     # 阻止经过 eht0 IP 地址为 "xx.xx.xx.xx" 的流量

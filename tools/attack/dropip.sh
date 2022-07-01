@@ -13,7 +13,7 @@
 ####
 
 # 将连接数超过100的ip封掉
-/bin/netstat -na|grep ESTABLISHED|awk '{print $5}'|awk -F: '{print $1}'|sort|uniq -c|sort -rn|head -10|grep -v -E '192.168|127.0'|awk '{if ($2!=null && $1>100) {print $2}}'
+/bin/netstat -na|grep ESTABLISHED|awk '{print $5}'|awk -F: '{print $1}'|sort|uniq -c|sort -rn|head -10|grep -v -E '192.168|127.0|0.0.0'|awk '{if ($2!=null && $1>100) {print $2}}'
 
 for i in $(cat /tmp/dropip)
 do
