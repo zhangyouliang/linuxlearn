@@ -8,19 +8,19 @@
 ```bash
 - Debian/Ubuntu    
 # 显示包的本地缓存信息
-apt-cache show package 
-apt show package
+apt-cache show <package> 
+apt show <package>
 # 显示包的当前安装状态 
-dpkg -s package 
+dpkg -s <package> 
 # 显示包含此软件包的所有位置
-dpkg -L package
+dpkg -L <package>
 
 - Centos
-yum info package 显示包的信息
-yum deplist package 显示包的依赖信息
+yum info <package> 显示包的信息
+yum deplist <package> 显示包的依赖信息
 - Fedora 
-dnf info package 显示包的信息
-dnf repoquery --requires package 列出包的依赖
+dnf info <package> 显示包的信息
+dnf repoquery --requires <package> 列出包的依赖
 ```
 
 
