@@ -6,16 +6,22 @@
 
 四表五链概念:
 
+四表(五表)
 - filter表——过滤数据包
 - Nat表——用于网络地址转换（IP、端口）
 - Mangle表——修改数据包的服务类型、TTL、并且可以配置路由实现QOS
 - Raw表——决定数据包是否被状态跟踪机制处理
+- Security表：用于强制访问控制（Mandatory Access Control），很少使用
 
+其优先级从高到低为 raw ⇨ mangle ⇨ nat ⇨ filter ⇨ security
+
+五链
 - INPUT链——进来的数据包应用此规则链中的策略
 - OUTPUT链——外出的数据包应用此规则链中的策略
 - FORWARD链——转发数据包时应用此规则链中的策略
 - PREROUTING链——对数据包作路由选择前应用此链中的规则（所有的数据包进来的时侯都先由这个链处理）
 - POSTROUTING链——对数据包作路由选择后应用此链中的规则（所有的数据包出来的时侯都先由这个链处理）
+
 
 
 ![image](./images/1124877-20170313192222073-1011363533.png)
@@ -29,6 +35,16 @@
 
 
 ![image](./images/1124877-20170313192235432-1409509839.png)
+
+对于从网络接口入站的IP封包，首先进入PREROUTING链，然后进行路由判断：
+
+如果封包路由目的地是本机，则进入INPUT链，然后发给本地进程
+
+如果封包路由目的地不是本机，并且启用了IP转发，则进入FORWARD链，然后通过POSTROUTING链，最后经过网络接口发走
+
+对于本地进程发往协议栈的封包，则首先通过OUTPUT链，然后通过POSTROUTING链，最后经过网络接口发走
+
+
 
 ![image](./images/2fe617bf589da094e04fbfe059bba857.png)
 
@@ -200,6 +216,11 @@ Dport 是目的端口
 tcpdump -i docker0 -AAl src 60.28.215.123 or dst 60.28.215.123
 ````
 
+
+完整图
+----
+
+![image](./images/v2-5bc49320254d5da0531c3029e233b138_r.jpeg)
 
 
 参考
