@@ -35,6 +35,15 @@ s ∶取代，可以直接进行取代的工作哩！通常这个 s 的动作可
 
     sed 's/text/replace_text/'  file // 替换每行的第一个匹配的 text
 
+追加
+
+     sed '/text/i\append_text' file // 在 text 的下一行追加 append_text
+
+插入
+
+     sed '/text/i\insert_text' file // 在 text 的上一行插入 insert_text
+
+
 全局替换
 
     sed 's/text/replace_text/g' file
