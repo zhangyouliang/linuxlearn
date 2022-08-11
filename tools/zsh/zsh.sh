@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 # 插件下载
-cd ~/.oh-my-zsh/plugins/
+# 系统插件
+# cd ~/.oh-my-zsh/plugins/
+# 自定义插件目录
+cd ~/.oh-my-zsh/custom/plugins
+
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
 git clone https://github.com/Aloxaf/fzf-tab.git
 git clone https://github.com/zsh-users/zsh-autosuggestions.git
