@@ -123,4 +123,9 @@ echo -n "$IFS" | hexdump -c
 # 0000000      \t  \n                                                    
 # 0000003
 
+# 批量替换 .mp4 后缀改为 .ts
+IFS=$'\n'
+for var in `ls *.mp4`;do
+mv "$var" ${var/.mp4/.ts}
+done
 ````
